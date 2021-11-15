@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>style.css</file>
+        <file>fonts/Pacifico-Regular.ttf</file>
+        <file>img/1.jpg</file>
+    </qresource>
+</RCC>

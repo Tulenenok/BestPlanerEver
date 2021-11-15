@@ -1,0 +1,50 @@
+@font-face {
+    font-family: 'Pacifico';
+    src: local('Pacifico'),
+            url(/fonts/Pacifico-Regular.ttf) format('ttf');
+}
+
+QFrame#authFrame
+{
+    background-color: none;
+    border: 10px solid rgb(128, 35, 243);
+    border-radius: 8px;
+    align-items: center;
+}
+
+QPushButton
+{
+    font-family: 'Pacifico';
+    color: qlineargradient(spread:pad, x1:0, y1:0, x2:0.02, y2:0.0170455, stop:0 rgba(0, 0, 0, 255), stop:1 rgba(255, 255, 255, 199));
+    border: none;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 18px;
+}
+
+QPushButton:hover
+{
+    border: 2px solid qlineargradient(spread:pad, x1:0, y1:0, x2:0.02, y2:0.0170455, stop:0 rgba(0, 0, 0, 255), stop:1 rgba(255, 255, 255, 199));
+    color: white;
+}
+
+QLineEdit
+{
+    font-family: 'Pacifico';
+    font-size: 20px;
+    background-color: none;
+    border: 2px solid rgb(128, 35, 243);
+    border-radius: 8px;
+    padding-left: 5px;
+    color: white;
+}
+
+QLabel
+{
+    font-family: 'Pacifico';
+    text-align: center;
+    font-size: 18px;
+    padding-top: 10px;
+    background-color:rgb(20, 20, 20);
+    color: qlineargradient(spread:pad, x1:0, y1:0, x2:0.02, y2:0.0170455, stop:0 rgba(0, 0, 0, 255), stop:1 rgba(255, 255, 255, 199));
+}
