@@ -111,7 +111,7 @@
       <string>Come in</string>
      </property>
     </widget>
-    <widget class="QLineEdit" name="password_2">
+    <widget class="QLineEdit" name="login">
      <property name="geometry">
       <rect>
        <x>40</x>
@@ -127,7 +127,7 @@
     <zorder>password</zorder>
     <zorder>label_2</zorder>
     <zorder>pushButton</zorder>
-    <zorder>password_2</zorder>
+    <zorder>login</zorder>
     <zorder>label</zorder>
    </widget>
    <widget class="QPushButton" name="pushButton_2">

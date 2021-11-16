@@ -21,7 +21,7 @@ regform::~regform()
 }
 
 // функция, которая обрабатывает введенные значения
-// записывать что-либо в обычный файлик она не хотела принципиально
+// правда, записывать что-либо в обычный файлик она не захотела принципиально
 void regform::on_pushButton_clicked()
 {
     QString name = ui->name->text();
@@ -53,12 +53,6 @@ void regform::on_pushButton_clicked()
 //        }
 //        fprintf(f, "%s %s %s\n", name.toLatin1().data(), mail.toLatin1().data(), password.toLatin1().data());
 //        fclose(f);
-    }
-    else
-    {
-        QMessageBox msgBox;
-        msgBox.setText("Error");
-        msgBox.exec();
     }
 
     QWidget::close();

@@ -2,6 +2,7 @@
 #include "./ui_mainwindow.h"
 #include "catform.h"
 #include "regform.h"
+#include "planwindow.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -15,6 +16,20 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+// основной вход
+void MainWindow::on_pushButton_clicked()
+{
+    QString login = ui->login->text();
+    QString password = ui->password->text();
+
+    // проверки корректности логина и пароля
+
+    hide();
+    planWindow plan;
+    plan.setModal(true);
+    plan.exec();
+}
+
 // форма регистрации
 void MainWindow::on_pushButton_2_clicked()
 {
@@ -25,13 +40,6 @@ void MainWindow::on_pushButton_2_clicked()
 
 // форма с котиками
 void MainWindow::on_pushButton_3_clicked()
-{
-    catform cats;
-    cats.setModal(true);
-    cats.exec();
-}
-
-void MainWindow::on_pushButton_clicked()
 {
     catform cats;
     cats.setModal(true);

@@ -46,10 +46,17 @@ set(REG_FORM_FILES
         regform.ui
 )
 
+set(PLAN_FILES
+        planwindow.cpp
+        planwindow.h
+        planwindow.ui
+)
+
 set(PROJECT_SOURCES
       ${MAIN_FILES}
       ${CAT_FORM_FILES}
       ${REG_FORM_FILES}
+      ${PLAN_FILES}
 )
 
 set(RESOURCES
