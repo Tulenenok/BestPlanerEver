@@ -16,6 +16,21 @@ QFrame#authFrame, QFrame#catFrame, QFrame#regFrame, QFrame#quoteFrame
     border-radius: 6px;
 }
 
+QLabel#taskLabel_1, QFrame#taskLabel_2, QFrame#taskLabel_3, QLabel#numberLabel_1, QFrame#numberLabel_2, QFrame#numberLabel_3
+{
+    padding-top: 0;
+    padding-bottom: 7px;
+    padding-left: 4px;
+    background-color: none;
+    border: 2px solid rgb(128, 35, 243);
+    border-radius: 6px;
+}
+
+QLabel#numberLabel_1, QFrame#numberLabel_2, QFrame#numberLabel_3
+{
+    padding-left: 8px;
+}
+
 QPushButton
 {
     font-family: 'Pacifico';
@@ -65,7 +80,7 @@ QLabel#image
     border: 12px solid qlineargradient(spread:pad, x1:0, y1:0, x2:0.02, y2:0.0170455, stop:0 rgba(0, 0, 0, 77), stop:1 rgba(255, 255, 255, 199));
 }
 
-QLabel#sorryLabel
+QLabel#sorryLabel, QLabel#cat
 {
     padding: 0;
 }

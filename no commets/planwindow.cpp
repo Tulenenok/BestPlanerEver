@@ -19,6 +19,31 @@ void planWindow::setPhotos()
    // QPixmap settings_pix(":/img/cats/7.png");
     ui->settingsButton->setIcon(QIcon(":/img/settings.png"));
     ui->settingsButton->setIconSize(QSize(45, 45));
+
+    QPixmap cat_pix(":/img/cats/10.jpg");
+    ui->cat->setPixmap(cat_pix.scaled(ui->cat->width(), ui->cat->height(), Qt::KeepAspectRatio));
+}
+
+// функция для загрузки данных о задачах
+void planWindow::uploadDataTasks()
+{
+    planWindow::tasks = new QString[planWindow::count_tasks];
+
+    tasks[0] = "Сделать технопарк";
+    tasks[1] = "Почесать кота";
+    tasks[2] = "Поспать";
+}
+
+void planWindow::fillTasks()
+{
+    ui->numberLabel_1->setText("1");
+    ui->taskLabel_1->setText(planWindow::tasks[0]);
+
+    ui->numberLabel_2->setText("2");
+    ui->taskLabel_2->setText(planWindow::tasks[1]);
+
+    ui->numberLabel_3->setText("3");
+    ui->taskLabel_3->setText(planWindow::tasks[2]);
 }
 
 planWindow::planWindow(QWidget *parent) :
@@ -28,6 +53,8 @@ planWindow::planWindow(QWidget *parent) :
     ui->setupUi(this);
 
     planWindow::setPhotos();
+    planWindow::uploadDataTasks();
+    planWindow::fillTasks();
 
     planWindow::user_name = "Cat";                       // какое-то считываение данных о пользователе
     ui->userNameLable->setText(planWindow::user_name);

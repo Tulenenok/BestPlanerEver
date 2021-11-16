@@ -25,8 +25,13 @@ private:
     Ui::planWindow *ui;
 
     QString user_name;
+    QString *tasks;
+
+    int count_tasks = 3;
 
     void setPhotos();
+    void uploadDataTasks();
+    void fillTasks();
 };
 
 #endif // PLANWINDOW_H
