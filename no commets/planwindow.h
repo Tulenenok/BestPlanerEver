@@ -2,6 +2,7 @@
 #define PLANWINDOW_H
 
 #include <QDialog>
+#include <QString>
 
 namespace Ui {
 class planWindow;
@@ -20,6 +21,10 @@ private slots:
 
 private:
     Ui::planWindow *ui;
+
+    QString user_name;
+
+    void setPhotos();
 };
 
 #endif // PLANWINDOW_H

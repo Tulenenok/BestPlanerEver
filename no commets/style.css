@@ -56,7 +56,7 @@ QLabel
 QLabel#quote
 {
     padding: 0;
-    font-size: 25px;
+    font-size: 22px;
 }
 
 QLabel#image
@@ -70,8 +70,38 @@ QLabel#sorryLabel
     padding: 0;
 }
 
+QLabel#profileImg
+{
+    padding: 0;
+    background-color:green;
+    border:none;
+    border-radius: 50%;
+}
+
+QLabel#userNameLable
+{
+    padding: 0;
+    font-size: 25px;
+}
+
+QLabel#userNameLable:hover, QLabel#quote:hover
+{
+    color:white;
+}
+
 QLine
 {
     border: 4px solid green;
 }
 
+QPushButton#settingsButton
+{
+    background-color:none;
+    border:none;
+}
+
+QPushButton#settingsButton:hover
+{
+    background-color:none;
+    border:2px solid qlineargradient(spread:pad, x1:0.239, y1:0.210636, x2:1, y2:1, stop:1 rgba(100, 0, 221, 79));
+}
