@@ -3,5 +3,7 @@
         <file>style.css</file>
         <file>fonts/Pacifico-Regular.ttf</file>
         <file>img/1.jpg</file>
+        <file>img/cats/1.jpg</file>
+        <file>img/cats/2.jpg</file>
     </qresource>
 </RCC>

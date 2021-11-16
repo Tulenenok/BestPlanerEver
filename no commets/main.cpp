@@ -12,8 +12,6 @@ int main(int argc, char *argv[])
     a.setStyleSheet(file.readAll());
     MainWindow w;
 
-    w.setFixedSize(16777215, 16777215);
-
     w.show();
     return a.exec();
 }

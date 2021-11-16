@@ -4,11 +4,16 @@
             url(/fonts/Pacifico-Regular.ttf) format('ttf');
 }
 
-QFrame#authFrame
+QDialog#catform, QDialog#regform
+{
+    background-color: rgb(20, 20, 20);
+}
+
+QFrame#authFrame, QFrame#catFrame, QFrame#regFrame
 {
     background-color: none;
     border: 10px solid rgb(128, 35, 243);
-    border-radius: 8px;
+    border-radius: 6px;
     align-items: center;
 }
 
@@ -31,7 +36,7 @@ QPushButton:hover
 QLineEdit
 {
     font-family: 'Pacifico';
-    font-size: 20px;
+    font-size: 17px;
     background-color: none;
     border: 2px solid rgb(128, 35, 243);
     border-radius: 8px;
@@ -48,3 +53,15 @@ QLabel
     background-color:rgb(20, 20, 20);
     color: qlineargradient(spread:pad, x1:0, y1:0, x2:0.02, y2:0.0170455, stop:0 rgba(0, 0, 0, 255), stop:1 rgba(255, 255, 255, 199));
 }
+
+QLabel#image
+{
+    padding: 0;
+    border: 12px solid qlineargradient(spread:pad, x1:0, y1:0, x2:0.02, y2:0.0170455, stop:0 rgba(0, 0, 0, 77), stop:1 rgba(255, 255, 255, 199));
+}
+
+QLabel#sorryLabel
+{
+    padding: 0;
+}
+
