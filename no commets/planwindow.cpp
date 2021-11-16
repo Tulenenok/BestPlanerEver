@@ -1,5 +1,6 @@
 #include "planwindow.h"
 #include "ui_planwindow.h"
+#include "settingsform.h"
 
 #include <QPixmap>
 #include <QIcon>
@@ -41,4 +42,11 @@ planWindow::~planWindow()
 void planWindow::on_pushButton_2_clicked()
 {
     QWidget::close();
+}
+
+void planWindow::on_settingsButton_clicked()
+{
+    settingsForm sets;
+    sets.setModal(true);
+    sets.exec();
 }

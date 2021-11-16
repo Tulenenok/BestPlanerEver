@@ -70,12 +70,27 @@ QLabel#sorryLabel
     padding: 0;
 }
 
-QLabel#profileImg
+QLabel#loginLabel, QLabel#passwordLabel
+{
+    padding: 0 0 0 8px;
+    border: 2px solid rgb(128, 35, 243);
+    border-radius: 8px;
+    font-size: 15px;
+}
+
+QLabel#profileImg, QLabel#profileImg_2
 {
     padding: 0;
     background-color:green;
     border:none;
     border-radius: 50%;
+}
+
+QLabel#profileImg_div
+{
+    padding: 0;
+    border:2px solid rgb(128, 35, 243);
+    border-radius: 25%;
 }
 
 QLabel#userNameLable
@@ -87,6 +102,12 @@ QLabel#userNameLable
 QLabel#userNameLable:hover, QLabel#quote:hover
 {
     color:white;
+}
+
+QLabel#SetLabel
+{
+    color:white;
+    font-size: 30px;
 }
 
 QLine

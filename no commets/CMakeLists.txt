@@ -52,11 +52,19 @@ set(PLAN_FILES
         planwindow.ui
 )
 
+set(SET_FORM_FILES
+        settingsform.cpp
+        settingsform.h
+        settingsform.ui
+)
+
+
 set(PROJECT_SOURCES
       ${MAIN_FILES}
       ${CAT_FORM_FILES}
       ${REG_FORM_FILES}
       ${PLAN_FILES}
+      ${SET_FORM_FILES}
 )
 
 set(RESOURCES
