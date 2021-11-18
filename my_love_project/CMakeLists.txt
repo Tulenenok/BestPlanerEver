@@ -27,35 +27,37 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(QT NAMES Qt6 Qt5 COMPONENTS Widgets REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets REQUIRED)
 
+include_directories(include)
+
 set(MAIN_FILES
-        main.cpp
-        mainwindow.cpp
-        mainwindow.h
-        mainwindow.ui
+        src/main.cpp
+        src/mainwindow.cpp
+        include/mainwindow.h
+        src/mainwindow.ui
 )
 
 set(CAT_FORM_FILES
-        catform.cpp
-        catform.h
-        catform.ui
+        src/catform.cpp
+        include/catform.h
+        src/catform.ui
 )
 
 set(REG_FORM_FILES
-        regform.cpp
-        regform.h
-        regform.ui
+        src/regform.cpp
+        include/regform.h
+        src/regform.ui
 )
 
 set(PLAN_FILES
-        planwindow.cpp
-        planwindow.h
-        planwindow.ui
+        src/planwindow.cpp
+        include/planwindow.h
+        src/planwindow.ui
 )
 
 set(SET_FORM_FILES
-        settingsform.cpp
-        settingsform.h
-        settingsform.ui
+        src/settingsform.cpp
+        include/settingsform.h
+        src/settingsform.ui
 )
 
 
@@ -68,7 +70,7 @@ set(PROJECT_SOURCES
 )
 
 set(RESOURCES
-        resources.qrc)
+        sources/resources.qrc)
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(my_love_project
