@@ -9,7 +9,8 @@
 #include <utility>
 #include <sstream>
 
-#include <jsoncons/json.hpp>
+#include <nlohmann/json.hpp>
+using json = nlohmann::json;
 
 namespace server3 {
 
@@ -84,6 +85,24 @@ namespace server3 {
                         res.set(http::field::content_type, "application/json; charset=UTF-8");
                         res.result(http::status::ok);
                         response_body = "{" + user_part + "," + "\"data\" : \"users\"" + "}";
+                        res.body() = response_body;
+                        res.set(http::field::content_length, std::to_string(response_body.length()));
+                    }
+                    else if (request_str.find("/login") != std::string::npos) {
+                        int user_id = 0;
+
+                        //BD function
+
+                        json j_response;
+                        j_response["user_id"] = user_id;
+                        //parse
+
+                        res.set(http::field::server, BOOST_BEAST_VERSION_STRING);
+                        res.version(10);
+                        res.set(http::field::location, "/user/" + std::to_string(user_id));
+                        res.set(http::field::content_type, "application/json; charset=UTF-8");
+                        res.result(http::status::ok);
+                        response_body = j_response.dump();
                         res.body() = response_body;
                         res.set(http::field::content_length, std::to_string(response_body.length()));
                     }
