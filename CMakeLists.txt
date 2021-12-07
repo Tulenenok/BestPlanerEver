@@ -5,7 +5,20 @@ project(boost.beast)
 
 find_package(Boost)
 include_directories(${Boost_INCLUDE_DIRS})
-include_directories(jsoncons)
+
+
+include(FetchContent)
+
+FetchContent_Declare(json
+  GIT_REPOSITORY https://github.com/ArthurSonzogni/nlohmann_json_cmake_fetchcontent
+  GIT_TAG v3.7.3)
+
+FetchContent_GetProperties(json)
+if(NOT json_POPULATED)
+  FetchContent_Populate(json)
+  add_subdirectory(${json_SOURCE_DIR} ${json_BINARY_DIR} EXCLUDE_FROM_ALL)
+endif()
+
 
 # Async HTTP Client
 # add_executable(async.http.client  async.http.client.cpp)
@@ -13,4 +26,8 @@ include_directories(jsoncons)
 
 #  Async HTTP Server
 add_executable(async.http.server async.http.server.h async.http.server.cpp connection.h connection.cpp)
-target_link_libraries(async.http.server  pthread ${Boost_LIBRARIES})
+target_link_libraries(async.http.server  pthread ${Boost_LIBRARIES} nlohmann_json::nlohmann_json)
+
+
+
+# target_link_libraries(async.http.server PRIVATE nlohmann_json::nlohmann_json)
