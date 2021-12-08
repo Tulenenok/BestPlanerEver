@@ -1,10 +1,18 @@
-cmake_minimum_required(VERSION 3.8)
+cmake_minimum_required(VERSION 3.16)
 set (CMAKE_CXX_STANDARD 14)
 
 project(boost.beast)
 
 find_package(Boost)
-include_directories(${Boost_INCLUDE_DIRS})
+include_directories(${Boost_INCLUDE_DIRS} V2)
+
+
+
+add_subdirectory(V2)
+
+# add_executable(main src/main.c)
+# target_link_libraries(main recsys recsys_multi)
+
 
 
 include(FetchContent)
@@ -26,8 +34,7 @@ endif()
 
 #  Async HTTP Server
 add_executable(async.http.server async.http.server.h async.http.server.cpp connection.h connection.cpp)
-target_link_libraries(async.http.server  pthread ${Boost_LIBRARIES} nlohmann_json::nlohmann_json)
-
+target_link_libraries(async.http.server  pthread ${Boost_LIBRARIES} nlohmann_json::nlohmann_json database)
 
 
 # target_link_libraries(async.http.server PRIVATE nlohmann_json::nlohmann_json)

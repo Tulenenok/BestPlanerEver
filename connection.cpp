@@ -9,6 +9,7 @@
 #include <utility>
 #include <sstream>
 
+#include <Header.h>
 #include <nlohmann/json.hpp>
 using json = nlohmann::json;
 
@@ -71,20 +72,47 @@ namespace server3 {
                 http::response<http::string_body> res{http::status::bad_request, request_.version()};
                 std::string request_str = request_.target().to_string();
                 std::string response_body;
-                
+
+
+                BestPlanDB database;
+
+                int status = database.Insert_New_User("login1", "main1", "password1");
+                if (status == 0) {
+                    std::cout << "user_inserted" << std::endl;
+                }
+                std::vector<std::string> tasks = {"NEWTASK", "NEWTASK1", "NEWTASK1", "NEWTASK1", "NEWTASK1", "NEWTASK1", "NEWTASK1"};
+                status = database.Delete_Task(5, 5);
+                if (status == 0) {
+                    std::cout << "task_added" << std::endl;
+                }
+
+
                 if (request_.method() == http::verb::get) {
                     if(request_.target().find("/user/") != std::string::npos) {
                         int user_id = get_user_id(request_str);
                         std::string user_part = "\"userId\": " + std::to_string(user_id) + " ";
 
-                        //BD_function(user_id);
 
+                        //BD_function(user_id);
+                        std::vector<string> taskss = database.get_all_tasks(user_id);
+
+                        // database.Delete_Task(1, 1);
+
+                        std::cout << taskss.size() <<std::endl;
+                        json j_response;
+                        for (auto& task : taskss) {
+                            std::cout << task << std::endl;
+                        }
+                        
+                        j_response["userID"] = user_id;
+                        j_response["tasks"] = "tasks";
                                                 
                         res.set(http::field::server, BOOST_BEAST_VERSION_STRING);
                         res.version(10);
                         res.set(http::field::content_type, "application/json; charset=UTF-8");
                         res.result(http::status::ok);
-                        response_body = "{" + user_part + "," + "\"data\" : \"users\"" + "}";
+
+                        response_body = j_response.dump();
                         res.body() = response_body;
                         res.set(http::field::content_length, std::to_string(response_body.length()));
                     }
