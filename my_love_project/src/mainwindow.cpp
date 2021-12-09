@@ -9,7 +9,7 @@ MainWindow::MainWindow(InterClient _client, QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-	client = _client;
+    client = _client;
 }
 
 MainWindow::~MainWindow()
@@ -29,7 +29,7 @@ void MainWindow::on_pushButton_clicked()
 	if(rc == 200)
 	{
 		hide();
-		planWindow plan;
+		planWindow plan(login.toLatin1().data(), client);
 		plan.setModal(true);
 		plan.exec();
 	}
