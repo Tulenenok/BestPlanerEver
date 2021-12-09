@@ -4,6 +4,7 @@
 #include <QMainWindow>
 
 #include "client.h"
+#include <iostream>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
