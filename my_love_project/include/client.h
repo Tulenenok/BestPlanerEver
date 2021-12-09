@@ -40,7 +40,7 @@ public:
     	close(sock);
 	}
 
-  std::vector<std::string> get_all_tasks_by_userid(int user_id);
+  int get_all_tasks_by_userid(int user_id);
 
   int login(std::string user_login, std::string user_password);
 
