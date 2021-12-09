@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include <QString>
+#include "client.h"
 
 namespace Ui {
 class planWindow;
