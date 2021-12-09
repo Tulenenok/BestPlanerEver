@@ -93,5 +93,4 @@ else()
     endif()
 endif()
 
-target_link_libraries(my_love_project client)
-target_link_libraries(my_love_project PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
+target_link_libraries(my_love_project PRIVATE client Qt${QT_VERSION_MAJOR}::Widgets)
