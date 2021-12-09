@@ -26,7 +26,7 @@ void MainWindow::on_pushButton_clicked()
 	int rc = client.login(login.toLatin1().data(),  password.toLatin1().data());
 	std::cout << "Result of check" << rc;
 	
-	if(rc == 200)
+	if(rc == 0)
 	{
 		hide();
 		planWindow plan(login.toLatin1().data(), client);
