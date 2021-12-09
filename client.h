@@ -40,11 +40,11 @@ public:
     	close(sock);
 	}
 
-  	int get_all_tasks_by_userid(int user_id);
+  std::vector<std::string> get_all_tasks_by_userid(int user_id);
 
   int login(std::string user_login, std::string user_password);
 
-  int add_new_task(int user_id, std::string task);
+  int add_new_task(int user_id, int task_id, std::string task);
 
   int delete_task(int user_id, int task_id);
 
@@ -64,6 +64,6 @@ private:
 	int run();
 private:
 	int sock;
-  	http::request<http::empty_body> request_;
+  	http::request<http::string_body>  request_;
   	http::response<http::string_body> response_;
 };
