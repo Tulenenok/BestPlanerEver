@@ -35,7 +35,7 @@ int InterClient::login(std::string user_login, std::string user_password) {
 	request_.set(http::field::accept, "application/json");
 	request_.set(http::field::user_agent, BOOST_BEAST_VERSION_STRING);
 
-	std::string body = "{\"login\":" + user_login + "," + "\"password\":" + user_password "}";
+	std::string body = "{\"login\":" + user_login + "," + "\"password\":" + user_password + "}";
 	std::stringstream in;
 	in << request_;
 	write_to_server(sock, in.str() + body + "\r\n\r\n");
