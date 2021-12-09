@@ -93,12 +93,11 @@ namespace server3 {
                         std::string user_part = "\"userId\": " + std::to_string(user_id) + " ";
                         std::vector<string> taskss = database.get_all_tasks(user_id);
 
-                        std::cout << taskss.size() <<std::endl;
+                        //std::cout << taskss.size() <<std::endl;
                         json j_response;
-                        ////////////form json from vector
-                        
+                       
                         j_response["userID"] = user_id;
-                        j_response["tasks"] = "tasks";
+                        j_response["tasks"] = taskss;
                                                 
                         res.set(http::field::server, BOOST_BEAST_VERSION_STRING);
                         res.version(10);
@@ -111,7 +110,7 @@ namespace server3 {
                     }
                     else if (request_str.find("/login") != std::string::npos) {
 
-                        std::cout << request_.body() << std::endl;
+                        //std::cout << "login body:\n" << request_.body() << std::endl;
                         json j_req = json::parse(request_.body());
 
                         vector<pair<int, vector<string>>> user_vec = database.login(j_req["login"], j_req["password"]);
@@ -122,19 +121,14 @@ namespace server3 {
 
                         std::pair<int, vector<string>> pair_ = user_vec[0];
                         j_response["task_id"] = std::get<0>(pair_);
-                        //vector to json
-                        for (auto& task : std::get<1>(pair_)) {
-                            std::cout << task <<std::endl;
-                        }
 
+                        // std::string string_tasks = "[";
+                        // for (auto& task : std::get<1>(pair_)) {
+                        //     string_tasks += task + ", ";
+                        // }
+                        // string_tasks += "]";
 
-                        std::string string_tasks = "{";
-                        for (auto& task : std::get<1>(pair_)) {
-                            string_tasks += "\"task\":" + task + ", " ;
-                        }
-                        string_tasks += "}";
-
-                        std::cout << "final json:\n" << string_tasks << std::endl;
+                        j_response["tasks"] = std::get<1>(pair_);
 
                         res.set(http::field::server, BOOST_BEAST_VERSION_STRING);
                         res.version(10);
@@ -160,6 +154,7 @@ namespace server3 {
                         std::string task_part = "\"taskId\": " + std::to_string(std::get<0>(task)) + "," + "\"operation\": " + std::get<1>(task);
 
                         if (std::get<1>(task) == "new") {
+                            //std::cout << request_ << std::endl;
                             json j_req = json::parse(request_.body());
                             int result = database.New_Task(user_id, std::get<0>(task), j_req["task"]);
                             if (result != 0) {
@@ -167,6 +162,7 @@ namespace server3 {
                             }
                         }
                         else if (std::get<1>(task) == "alter") {
+                            std::cout << request_ <<std::endl;
                             json j_req = json::parse(request_.body());
                             int result = database.New_Task(user_id, std::get<0>(task), j_req["task"]);
                             if (result != 0) {
