@@ -17,14 +17,14 @@ class planWindow : public QDialog
 public:
     explicit planWindow(int _user_id, InterClient _client, QWidget* parent = nullptr);
     ~planWindow();
+    
+    InterClient client;
+    int user_id = _user_id;
 
 private slots:
     void on_pushButton_2_clicked();
 
     void on_settingsButton_clicked();
-
-    InterClient client;
-    int user_id = _user_id;
 
 private:
     Ui::planWindow* ui;
