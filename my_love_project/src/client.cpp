@@ -4,7 +4,7 @@
 using json = nlohmann::json;
 
 
-int InterClient::get_all_tasks_by_userid(int user_id) {
+std::vector<std::string> InterClient::get_all_tasks_by_userid(int user_id) {
 	std::string path = {"/user/"};
 	path += std::to_string(user_id) + "/tasks";
 
@@ -14,61 +14,92 @@ int InterClient::get_all_tasks_by_userid(int user_id) {
 	request_.set(http::field::host, "localhost");
 	request_.set(http::field::accept, "application/json");
 	request_.set(http::field::user_agent, BOOST_BEAST_VERSION_STRING);
+
+
+
 	std::stringstream in;
 	in << request_;
 	write_to_server(sock, in.str());
-	std::string answer = read_from_server(sock);
+    std::string answer = read_from_server(sock);
+
 	size_t body_index = answer.find("\r\n\r\n") + strlen("\r\n\r\n");
-	std::string body = answer.substr(body_index);
-	json j_ans = json::parse(body);
-	return 0;
+	std::string body_ = answer.substr(body_index);
+	//std::cout << body_ << std::endl;
+
+	json ans = json::parse(body_);
+
+	//std::cout << ans << std::endl;
+	
+
+	if (answer.find("HTTP/1.0 200 OK") == std::string::npos) {
+		std::cerr << "add_new_task bad status" << std::endl;
+		std::vector<std::string> ret;
+		return ret;
+	}
+	std::vector<std::string> all_the_tasks = ans["tasks"];
+
+	return all_the_tasks;
 }
 
 
 int InterClient::login(std::string user_login, std::string user_password) {
     std::string path = {"/login"};
+	std::string body = "{\"login\":\"" + user_login + "\"," + "\"password\":\"" + user_password + "\"}";
 
 	request_.version(10);
 	request_.method(http::verb::get);
 	request_.target(path);
+	request_.set(http::field::content_length, std::to_string(body.length()));
 	request_.set(http::field::host, "localhost");
 	request_.set(http::field::accept, "application/json");
 	request_.set(http::field::user_agent, BOOST_BEAST_VERSION_STRING);
+	request_.body() = body;
 
-	std::string body = "{\"login\":" + user_login + "," + "\"password\":" + user_password + "}";
+
 	std::stringstream in;
 	in << request_;
-	write_to_server(sock, in.str() + body + "\r\n\r\n");
+	write_to_server(sock, in.str());
     std::string answer = read_from_server(sock);
+
+	size_t body_index = answer.find("\r\n\r\n") + strlen("\r\n\r\n");
+	std::string body_ = answer.substr(body_index);
+	//std::cout << body_ << std::endl;
+
+	json ans = json::parse(body_);
+
+	//std::cout << ans << std::endl;
+
 	if (answer.find("HTTP/1.0 200 OK") == std::string::npos) {
 		std::cerr << "add_new_task bad status" << std::endl;
 		return -1;
 	}
+
 	//check location
 	return 0;
 }
 
 
-int InterClient::add_new_task(int user_id, std::string task) {
+int InterClient::add_new_task(int user_id, int task_id, std::string task) {
   	std::string path = {"/user/"};
-	path += std::to_string(user_id) + "/tasks/new";
-	std::string req = "{\"task\": " + task + "}";
+	path += std::to_string(user_id) + "/tasks/new/" + std::to_string(task_id);
+	std::string req = "{\"task\": \"" + task + "\"}";
 
 	request_.version(10);
 	request_.method(http::verb::post);
 	request_.target(path);
 	request_.set(http::field::host, "localhost");
+	request_.set(http::field::content_length, std::to_string(req.length()));
 	request_.set(http::field::user_agent, BOOST_BEAST_VERSION_STRING);
-
+	request_.body() = req;
 
 	
 	std::stringstream in;
 	in << request_;
 	//std::cout << in.str()+ << std::endl; 
-	write_to_server(sock, in.str() + req + "\r\n\r\n");
+	write_to_server(sock, in.str());
 	std::string answer = read_from_server(sock);
 	
-	if (answer.find("HTTP/1.0 201 Created") == std::string::npos) {
+	if (answer.find("HTTP/1.0 200 OK") == std::string::npos) {
 		std::cerr << "add_new_task bad status" << std::endl;
 		return -1;
 	}
@@ -79,7 +110,7 @@ int InterClient::add_new_task(int user_id, std::string task) {
 
 int InterClient::delete_task(int user_id, int task_id) {
 	std::string path = {"/user/"};
-	path += std::to_string(user_id) + "/tasks/" + std::to_string(task_id);
+	path += std::to_string(user_id) + "/tasks/delete/" + std::to_string(task_id);
 
 	request_.version(10);
 	request_.method(http::verb::post);
@@ -103,18 +134,20 @@ int InterClient::delete_task(int user_id, int task_id) {
 
 int InterClient::alter_task(int user_id, int task_id, std::string new_task) {
 	std::string path = {"/user/"};
-	path += std::to_string(user_id) + "/tasks/alter";
-	std::string req = "{\"task\": " + new_task + "}" + std::to_string(task_id);
+	path += std::to_string(user_id) + "/tasks/alter/" + std::to_string(task_id);
+	std::string req = "{\"task\": \"" + new_task + "\"}";
 
 	request_.version(10);
 	request_.method(http::verb::post);
 	request_.target(path);
 	request_.set(http::field::host, "localhost");
+	request_.set(http::field::content_length, std::to_string(req.length()));
 	request_.set(http::field::user_agent, BOOST_BEAST_VERSION_STRING);
+	request_.body() = req;
 	
 	std::stringstream in;
 	in << request_;
-	write_to_server(sock, in.str() + req + "\r\n\r\n");
+	write_to_server(sock, in.str());
 	std::string answer = read_from_server(sock);
 	
 	if (answer.find("HTTP/1.0 200 OK") == std::string::npos) {
