@@ -51,7 +51,7 @@ void planWindow::fillTasks()
     ui->taskLabel_3->setText(planWindow::tasks[2]);
 }
 
-planWindow::planWindow(_user_id, InterClient _client, QWidget *parent) :
+planWindow::planWindow(std::string _user_id, InterClient _client, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::planWindow)
 {
