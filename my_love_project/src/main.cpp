@@ -1,4 +1,5 @@
 #include "mainwindow.h"
+#include "client.h"
 
 #include <QApplication>
 #include <QFile>
@@ -10,8 +11,11 @@ int main(int argc, char *argv[])
     QFile file(":/style.css");
     file.open(QFile::ReadOnly);
     a.setStyleSheet(file.readAll());
-    MainWindow w;
-
+	
+	InterClient client;
+	
+    MainWindow w(client);
+	
     w.show();
     return a.exec();
 }

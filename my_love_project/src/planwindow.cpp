@@ -1,6 +1,7 @@
 #include "planwindow.h"
 #include "ui_planwindow.h"
 #include "settingsform.h"
+#include <iostream>
 
 #include <QPixmap>
 #include <QIcon>
@@ -28,6 +29,10 @@ void planWindow::setPhotos()
 void planWindow::uploadDataTasks()
 {
     planWindow::tasks = new QString[planWindow::count_tasks];
+	
+	int rc = client.get_all_tasks_by_userid(user_id);
+	
+	std::cout << "Result of take tasks = " << rc << "\n"; 
 
     tasks[0] = "Сделать технопарк";
     tasks[1] = "Почесать кота";
@@ -46,11 +51,14 @@ void planWindow::fillTasks()
     ui->taskLabel_3->setText(planWindow::tasks[2]);
 }
 
-planWindow::planWindow(QWidget *parent) :
+planWindow::planWindow(_user_id, InterClient _client, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::planWindow)
 {
     ui->setupUi(this);
+	
+	client = _client;
+	user_id = _user_id;
 
     planWindow::setPhotos();
     planWindow::uploadDataTasks();

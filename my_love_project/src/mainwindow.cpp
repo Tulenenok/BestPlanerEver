@@ -4,11 +4,12 @@
 #include "regform.h"
 #include "planwindow.h"
 
-MainWindow::MainWindow(QWidget *parent)
+MainWindow::MainWindow(InterClient _client, QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+	client = _client;
 }
 
 MainWindow::~MainWindow()
@@ -22,12 +23,16 @@ void MainWindow::on_pushButton_clicked()
     QString login = ui->login->text();
     QString password = ui->password->text();
 
-    // проверки корректности логина и пароля
-
-    hide();
-    planWindow plan;
-    plan.setModal(true);
-    plan.exec();
+	int rc = client.login(login.toLatin1().data(),  password.toLatin1().data());
+	std::cout << "Result of check" << rc;
+	
+	if(rc == 200)
+	{
+		hide();
+		planWindow plan;
+		plan.setModal(true);
+		plan.exec();
+	}
 }
 
 // форма регистрации
