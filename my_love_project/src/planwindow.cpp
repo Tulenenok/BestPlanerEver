@@ -2,6 +2,7 @@
 #include "ui_planwindow.h"
 #include "settingsform.h"
 #include <iostream>
+#include <string>
 
 #include <QPixmap>
 #include <QIcon>
@@ -58,7 +59,7 @@ planWindow::planWindow(std::string _user_id, InterClient _client, QWidget *paren
     ui->setupUi(this);
 	
 	client = _client;
-	user_id = _user_id;
+	user_id = stoi(_user_id);
 
     planWindow::setPhotos();
     planWindow::uploadDataTasks();
