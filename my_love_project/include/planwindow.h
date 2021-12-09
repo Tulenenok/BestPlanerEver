@@ -20,7 +20,7 @@ public:
     ~planWindow();
     
     InterClient client;
-    std::string user_id;
+    int user_id;
 
 private slots:
     void on_pushButton_2_clicked();
