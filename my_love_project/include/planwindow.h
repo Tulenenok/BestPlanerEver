@@ -4,6 +4,7 @@
 #include <QDialog>
 #include <QString>
 #include <iostream>
+#include <string>
 #include "client.h"
 
 namespace Ui
