@@ -76,33 +76,26 @@ namespace server3 {
 
                 BestPlanDB database;
 
-                int status = database.Insert_New_User("login1", "main1", "password1");
-                if (status == 0) {
-                    std::cout << "user_inserted" << std::endl;
-                }
-                std::vector<std::string> tasks = {"NEWTASK", "NEWTASK1", "NEWTASK1", "NEWTASK1", "NEWTASK1", "NEWTASK1", "NEWTASK1"};
-                status = database.Delete_Task(5, 5);
-                if (status == 0) {
-                    std::cout << "task_added" << std::endl;
-                }
+                // int status = database.Insert_New_User("login1", "main1", "password1");
+                // if (status == 0) {
+                //     std::cout << "user_inserted" << std::endl;
+                // }
+                // std::vector<std::string> tasks = {"NEWTASK", "NEWTASK1", "NEWTASK1", "NEWTASK1", "NEWTASK1", "NEWTASK1", "NEWTASK1"};
+                // status = database.Delete_Task(5, 5);
+                // if (status == 0) {
+                //     std::cout << "task_added" << std::endl;
+                // }
 
 
                 if (request_.method() == http::verb::get) {
                     if(request_.target().find("/user/") != std::string::npos) {
                         int user_id = get_user_id(request_str);
                         std::string user_part = "\"userId\": " + std::to_string(user_id) + " ";
-
-
-                        //BD_function(user_id);
                         std::vector<string> taskss = database.get_all_tasks(user_id);
-
-                        // database.Delete_Task(1, 1);
 
                         std::cout << taskss.size() <<std::endl;
                         json j_response;
-                        for (auto& task : taskss) {
-                            std::cout << task << std::endl;
-                        }
+                        ////////////form json from vector
                         
                         j_response["userID"] = user_id;
                         j_response["tasks"] = "tasks";
@@ -117,13 +110,31 @@ namespace server3 {
                         res.set(http::field::content_length, std::to_string(response_body.length()));
                     }
                     else if (request_str.find("/login") != std::string::npos) {
-                        int user_id = 0;
 
-                        //BD function
+                        std::cout << request_.body() << std::endl;
+                        json j_req = json::parse(request_.body());
+
+                        vector<pair<int, vector<string>>> user_vec = database.login(j_req["login"], j_req["password"]);
 
                         json j_response;
+                        int user_id = std::get<0>(user_vec[0]);
                         j_response["user_id"] = user_id;
-                        //parse
+
+                        std::pair<int, vector<string>> pair_ = user_vec[0];
+                        j_response["task_id"] = std::get<0>(pair_);
+                        //vector to json
+                        for (auto& task : std::get<1>(pair_)) {
+                            std::cout << task <<std::endl;
+                        }
+
+
+                        std::string string_tasks = "{";
+                        for (auto& task : std::get<1>(pair_)) {
+                            string_tasks += "\"task\":" + task + ", " ;
+                        }
+                        string_tasks += "}";
+
+                        std::cout << "final json:\n" << string_tasks << std::endl;
 
                         res.set(http::field::server, BOOST_BEAST_VERSION_STRING);
                         res.version(10);
@@ -149,15 +160,24 @@ namespace server3 {
                         std::string task_part = "\"taskId\": " + std::to_string(std::get<0>(task)) + "," + "\"operation\": " + std::get<1>(task);
 
                         if (std::get<1>(task) == "new") {
-                            //BD_function(user_id);
+                            json j_req = json::parse(request_.body());
+                            int result = database.New_Task(user_id, std::get<0>(task), j_req["task"]);
+                            if (result != 0) {
+                                std::cerr<< "New_task went wrong" << std::endl;
+                            }
                         }
                         else if (std::get<1>(task) == "alter") {
-                            //BD_function(user_id);
-                            
+                            json j_req = json::parse(request_.body());
+                            int result = database.New_Task(user_id, std::get<0>(task), j_req["task"]);
+                            if (result != 0) {
+                                std::cerr<< "New_task went wrong" << std::endl;
+                            }
                         }
                         else if (std::get<1>(task) == "delete") {
-                            //BD_function(user_id);
-                            
+                            int result = database.Delete_Task(user_id, std::get<0>(task));
+                            if (result != 0) {
+                                std::cerr<< "delete_task went wrong" << std::endl;
+                            }
                         }
                         else {
                             res.set(http::field::server, BOOST_BEAST_VERSION_STRING);
