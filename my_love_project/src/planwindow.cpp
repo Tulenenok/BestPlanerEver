@@ -31,9 +31,12 @@ void planWindow::uploadDataTasks()
 {
     planWindow::tasks = new QString[planWindow::count_tasks];
 	
-	int rc = client.get_all_tasks_by_userid(user_id);
+	std::vector<std::string> rc = client.get_all_tasks_by_userid(user_id);
 	
-	std::cout << "Result of take tasks = " << rc << "\n"; 
+	std::cout << "Result of take tasks = " << "\n";
+	for (auto&task : rc) {
+		std::cout << task << std::endl;
+	}
 
     tasks[0] = "Сделать технопарк";
     tasks[1] = "Почесать кота";

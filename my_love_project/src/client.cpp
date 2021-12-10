@@ -3,7 +3,7 @@
 #include <nlohmann/json.hpp>
 using json = nlohmann::json;
 
-int InterClient::get_all_tasks_by_userid(int user_id) {
+std::vector<std::string> InterClient::get_all_tasks_by_userid(int user_id) {
 	std::string path = {"/user/"};
 	path += std::to_string(user_id) + "/tasks";
 
@@ -37,7 +37,7 @@ int InterClient::get_all_tasks_by_userid(int user_id) {
 	}
 	std::vector<std::string> all_the_tasks = ans["tasks"];
 
-	return 0;
+	return all_the_tasks;
 }
 
 
