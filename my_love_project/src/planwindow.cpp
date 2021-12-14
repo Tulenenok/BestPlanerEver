@@ -6,6 +6,7 @@
 
 #include <QPixmap>
 #include <QIcon>
+#include <iostream>
 
 void planWindow::setPhotos()
 {
@@ -21,9 +22,6 @@ void planWindow::setPhotos()
    // QPixmap settings_pix(":/img/cats/7.png");
     ui->settingsButton->setIcon(QIcon(":/img/settings.png"));
     ui->settingsButton->setIconSize(QSize(45, 45));
-
-    QPixmap cat_pix(":/img/cats/10.jpg");
-    ui->cat->setPixmap(cat_pix.scaled(ui->cat->width(), ui->cat->height(), Qt::KeepAspectRatio));
 }
 
 // функция для загрузки данных о задачах
@@ -85,4 +83,13 @@ void planWindow::on_settingsButton_clicked()
     settingsForm sets;
     sets.setModal(true);
     sets.exec();
+}
+
+void planWindow::on_create_clicked()
+{
+    QString text_of_task = ui->text_of_new_task->toPlainText();
+
+    std::cout << "Text " << text_of_task.toLatin1().data();
+
+    QWidget::close();
 }
