@@ -31,7 +31,7 @@ void planWindow::uploadDataTasks()
 {
     planWindow::tasks = new QString[planWindow::count_tasks];
 	
-	int rc = client.get_all_tasks_by_userid(user_id);
+	int rc = *client.get_all_tasks_by_userid(user_id);
 	
 	std::cout << "Result of take tasks = " << rc << "\n"; 
 
@@ -52,7 +52,7 @@ void planWindow::fillTasks()
     ui->taskLabel_3->setText(planWindow::tasks[2]);
 }
 
-planWindow::planWindow(std::string _user_id, InterClient _client, QWidget *parent) :
+planWindow::planWindow(std::string _user_id, InterClient *_client, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::planWindow)
 {

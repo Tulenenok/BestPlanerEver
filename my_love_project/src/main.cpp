@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
 	
 	InterClient client;
 	
-    MainWindow w(client);
+    MainWindow w(&client);
 	
     w.show();
     return a.exec();

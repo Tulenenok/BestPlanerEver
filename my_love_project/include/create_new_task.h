@@ -13,10 +13,10 @@ class create_new_task : public QDialog
     Q_OBJECT
 
 public:
-    explicit create_new_task(int _user_id, InterClient _client, QWidget *parent = nullptr);
+    explicit create_new_task(int _user_id, InterClient *_client, QWidget *parent = nullptr);
     ~create_new_task();
 	
-	InterClient client;
+	InterClient *client;
 	int user_id;
 
 private slots:

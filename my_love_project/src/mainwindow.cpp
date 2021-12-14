@@ -4,7 +4,7 @@
 #include "regform.h"
 #include "planwindow.h"
 
-MainWindow::MainWindow(InterClient _client, QWidget *parent)
+MainWindow::MainWindow(InterClient *_client, QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
@@ -23,7 +23,7 @@ void MainWindow::on_pushButton_clicked()
     QString login = ui->login->text();
     QString password = ui->password->text();
 
-	int rc = client.login(login.toLatin1().data(),  password.toLatin1().data());
+	int rc = *client.login(login.toLatin1().data(),  password.toLatin1().data());
 	std::cout << "Result of check" << rc;
 	
 	if(rc == 0)

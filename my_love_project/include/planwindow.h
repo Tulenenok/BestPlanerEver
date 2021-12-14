@@ -17,10 +17,10 @@ class planWindow : public QDialog
     Q_OBJECT
 
 public:
-    explicit planWindow(std::string _user_id, InterClient _client, QWidget* parent = nullptr);
+    explicit planWindow(std::string _user_id, InterClient *_client, QWidget* parent = nullptr);
     ~planWindow();
     
-    InterClient client;
+    InterClient *client;
     int user_id;
 
 private slots:
