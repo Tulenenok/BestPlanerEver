@@ -76,7 +76,7 @@
    <property name="frameShadow">
     <enum>QFrame::Raised</enum>
    </property>
-   <widget class="QPushButton" name="create_new_task">
+   <widget class="QPushButton" name="see_cats">
     <property name="geometry">
      <rect>
       <x>270</x>
@@ -89,7 +89,7 @@
      <string notr="true">background-color: qlineargradient(spread:pad, x1:0.159204, y1:0.205, x2:1, y2:1, stop:0 rgba(100, 0, 221, 255), stop:1 rgba(255, 76, 255, 255));</string>
     </property>
     <property name="text">
-     <string>New</string>
+     <string>See cats</string>
     </property>
    </widget>
    <widget class="Line" name="line">
@@ -222,7 +222,7 @@
       <string/>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButton_3">
+    <widget class="QPushButton" name="done_1">
      <property name="geometry">
       <rect>
        <x>410</x>
@@ -238,7 +238,7 @@
       <string>done</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButton_4">
+    <widget class="QPushButton" name="edit_1">
      <property name="geometry">
       <rect>
        <x>330</x>
@@ -305,7 +305,7 @@
       <string/>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButton_5">
+    <widget class="QPushButton" name="edit_2">
      <property name="geometry">
       <rect>
        <x>330</x>
@@ -321,7 +321,7 @@
       <string>edit</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButton_7">
+    <widget class="QPushButton" name="done_2">
      <property name="geometry">
       <rect>
        <x>410</x>
@@ -388,7 +388,7 @@
       <string/>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButton_6">
+    <widget class="QPushButton" name="edit_3">
      <property name="geometry">
       <rect>
        <x>330</x>
@@ -404,7 +404,7 @@
       <string>edit</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButton_8">
+    <widget class="QPushButton" name="done_3">
      <property name="geometry">
       <rect>
        <x>410</x>
