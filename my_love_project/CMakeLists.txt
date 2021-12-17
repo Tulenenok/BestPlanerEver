@@ -65,6 +65,11 @@ set(SET_FORM_FILES
         src/settingsform.ui
 )
 
+set(SET_CREATE_NEW_TASK
+        create_new_task.cpp
+        create_new_task.h
+        create_new_task.ui
+)
 
 set(PROJECT_SOURCES
       ${MAIN_FILES}
@@ -72,6 +77,7 @@ set(PROJECT_SOURCES
       ${REG_FORM_FILES}
       ${PLAN_FILES}
       ${SET_FORM_FILES}
+	  ${SET_CREATE_NEW_TASK}
 )
 
 set(RESOURCES
