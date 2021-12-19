@@ -3,6 +3,7 @@
 #include <nlohmann/json.hpp>
 using json = nlohmann::json;
 
+
 std::vector<std::string> InterClient::get_all_tasks_by_userid(int user_id) {
 	std::string path = {"/user/"};
 	path += std::to_string(user_id) + "/tasks";
@@ -18,8 +19,12 @@ std::vector<std::string> InterClient::get_all_tasks_by_userid(int user_id) {
 
 	std::stringstream in;
 	in << request_;
+	//std::cerr << "requset:\n "<< in.str() << std::endl;
+
 	write_to_server(sock, in.str());
     std::string answer = read_from_server(sock);
+
+	std::cerr << "get all tasks data:\n" << answer << std::endl;
 
 	size_t body_index = answer.find("\r\n\r\n") + strlen("\r\n\r\n");
 	std::string body_ = answer.substr(body_index);
@@ -66,15 +71,24 @@ int InterClient::login(std::string user_login, std::string user_password) {
 
 	json ans = json::parse(body_);
 
-	//std::cout << ans << std::endl;
+	if (ans["tasks"][0] == "nothing") {
+		return -1;
+	}
+	
+
+	std::cerr << "Returned to login:\n" << ans << std::endl;
 
 	if (answer.find("HTTP/1.0 200 OK") == std::string::npos) {
 		std::cerr << "add_new_task bad status" << std::endl;
 		return -1;
 	}
 
+	int user_id = ans["user_id"];
+	//std::cerr << "user_id"  << user_id << std::endl;
+
+
 	//check location
-	return 0;
+	return user_id;
 }
 
 
@@ -170,11 +184,12 @@ void InterClient::write_to_server(int filedes, std::string msg) {
     left -= sent;
   }
 
-  printf("write message %s to socket \n", msg.c_str());
+  //printf("write message %s to socket \n", msg.c_str());
 }
 
 
 std::string InterClient::read_from_server(int filedes) {
+	run();
 	  char buf[1024];
 	
 	  int n = ::recv(filedes, buf, sizeof(buf), MSG_NOSIGNAL);
@@ -215,6 +230,11 @@ int InterClient::run() {
 		perror("socket (client)");
 		exit(EXIT_FAILURE);
 	}
+
+	int enable = 1;
+	if (setsockopt(sock, SOL_SOCKET, SO_KEEPALIVE, &enable, sizeof(int)) < 0)
+		std::cerr << "setsockopt(SO_KEEPALIVE) failed" << std::endl;
+
 	std::string host("127.0.0.1");
 	int port = std::stoi("8080");
 	struct sockaddr_in servername;

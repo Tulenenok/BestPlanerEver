@@ -15,5 +15,6 @@
         <file>img/settings.png</file>
         <file>img/cats/8.jpg</file>
         <file>img/cats/10.jpg</file>
+        <file>fonts/Inconsolata-VariableFont_wdth,wght.ttf</file>
     </qresource>
 </RCC>

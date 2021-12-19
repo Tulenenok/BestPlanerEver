@@ -15,10 +15,10 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    MainWindow(InterClient _client, QWidget *parent = nullptr);
+    MainWindow(InterClient *_client, QWidget *parent = nullptr);
     ~MainWindow();
 	
-	InterClient client;
+	InterClient *client;
 
 private slots:
     void on_pushButton_3_clicked();

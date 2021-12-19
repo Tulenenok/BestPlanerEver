@@ -1,7 +1,15 @@
+/*
 @font-face {
     font-family: 'Pacifico';
     src: local('Pacifico'),
             url(/fonts/Pacifico-Regular.ttf) format('ttf');
+}
+*/
+
+@font-face {
+    font-family: 'Inconsolata', monospace;
+    src: local('Inconsolata'),
+            url(/fonts/Inconsolata-VariableFont_wdth,wght.ttf) format('ttf');
 }
 
 QDialog#catform, QDialog#regform
@@ -33,7 +41,7 @@ QLabel#numberLabel_1, QFrame#numberLabel_2, QFrame#numberLabel_3
 
 QPushButton
 {
-    font-family: 'Pacifico';
+    font-family: 'Inconsolata';
     color: qlineargradient(spread:pad, x1:0, y1:0, x2:0.02, y2:0.0170455, stop:0 rgba(0, 0, 0, 255), stop:1 rgba(255, 255, 255, 199));
     border: none;
     border-radius: 8px;
@@ -49,7 +57,7 @@ QPushButton:hover
 
 QLineEdit
 {
-    font-family: 'Pacifico';
+    font-family: 'Inconsolata';
     font-size: 17px;
     background-color: none;
     border: 2px solid rgb(128, 35, 243);
@@ -60,7 +68,7 @@ QLineEdit
 
 QLabel
 {
-    font-family: 'Pacifico';
+    font-family: 'Inconsolata';
     text-align: center;
     font-size: 18px;
     padding-top: 10px;

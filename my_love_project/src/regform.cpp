@@ -21,7 +21,6 @@ regform::~regform()
 }
 
 // функция, которая обрабатывает введенные значения
-// правда, записывать что-либо в обычный файлик она не захотела принципиально
 void regform::on_pushButton_clicked()
 {
     QString name = ui->name->text();
