@@ -15,7 +15,7 @@
 
 #define NOT_VALUE_FOR_FIELD -1
 
-int is_not_empty_string(std::string str)
+static int is_not_empty_string(std::string str)
 {
 	for(int i = 0; i < str.size(); i++)
 		if(i != " ")
@@ -96,20 +96,20 @@ void planWindow::fillTasks()
 
 void planWindow::showLastTasks()
 {
-	if(id_tasks.size() < number_of_tasks.size())
+	if(id_tasks.size() < numbers_of_tasks.size())
 	{
 		int i = 0;
 		for(; i < id_tasks.size(); i++)
 			numbers_of_tasks[i] = id_tasks[i];
 		
-		for(; i < number_of_tasks.size(); i++)
+		for(; i < numbers_of_tasks.size(); i++)
 			numbers_of_tasks[i] = -1;
 		
 		return ;
 		
 	}
 	
-	for(int i = number_of_tasks.size(); i > 0; i--)
+	for(int i = numbers_of_tasks.size(); i > 0; i--)
 		numbers_of_tasks[i] = id_tasks[id_tasks.size() - i];
 	
 	fillTasks();
@@ -117,7 +117,7 @@ void planWindow::showLastTasks()
 
 void planWindow::on_pushButton_2_clicked()
 {
-	delete []number_of_tasks;
+	delete []numbers_of_tasks;
     QWidget::close();
 }
 
@@ -186,13 +186,13 @@ void planWindow::delete_task_by_index(int index)
 	if(numbers_of_tasks[index] == NOT_VALUE_FOR_FIELD)
 		return ;
 	
-	int number_of_task = numbers_of_tasks[index];                   // вытащили под каким айдишником лежит удаляемая задача
-    auto pos_of_elem = tasks.cbegin() + number_of_task + index;     // нашли позицию этой задачи
+	int num = numbers_of_tasks[index];                   // вытащили под каким айдишником лежит удаляемая задача
+    auto pos_of_elem = tasks.cbegin() + num + index;     // нашли позицию этой задачи
 	
     tasks.erase(pos_of_elem, pos_of_elem + 1);                      // удалили текст задачи
 	id_tasks.erase(pos_of_elem, pos_of_elem + 1);                   // удалили id задачи
     
-    client->delete_task(user_id, number_of_task);                   // удалили задачу с сервера
+    client->delete_task(user_id, num);                   // удалили задачу с сервера
 	
 	shift_numbers(index);                                           // переделали индексы
 	fillTasks();                                                    // перезаполнили 
@@ -213,25 +213,34 @@ void planWindow::on_done_3_clicked()
     delete_task_by_index(2);
 }
 
+void planWindow::edit_task_by_index(int index)
+{
+	if(numbers_of_tasks[index] == -1)
+	{
+		QMessageBox::warning(this, "Error", "Это пустое поле, его нельзя редактировать");
+		return ;
+	}
+	
+	edittask edit;
+    edit.setModal(&tasks[numbers_of_taks[index]], true);
+    edit.exec();
+	
+	fillTasks();
+}
+
 void planWindow::on_edit_1_clicked()
 {
-    // edittask edit;
-    // edit.setModal(true);
-    // edit.exec();
+    edit_task_by_index(0);
 }
 
 void planWindow::on_edit_2_clicked()
 {
-    // edittask edit;
-    // edit.setModal(true);
-    // edit.exec();
+    edit_task_by_index(1);
 }
 
 void planWindow::on_edit_3_clicked()
 {
-    // edittask edit;
-    // edit.setModal(true);
-    // edit.exec();
+    edit_task_by_index(2);
 }
 
 void planWindow::setPhotos()

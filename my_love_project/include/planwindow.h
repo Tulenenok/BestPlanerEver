@@ -59,6 +59,7 @@ private:
 	void shift_numbers(int from_index);
 	void showLastTasks();
 	void clean_form();
+	void edit_task_by_index(int index);
 };
 
 #endif // PLANWINDOW_H
