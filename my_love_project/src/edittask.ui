@@ -32,11 +32,11 @@
     <string>edit</string>
    </property>
   </widget>
-  <widget class="QTextBrowser" name="textBrowser">
+  <widget class="QTextBrowser" name="textNow">
    <property name="geometry">
     <rect>
      <x>50</x>
-     <y>80</y>
+     <y>90</y>
      <width>261</width>
      <height>61</height>
     </rect>
@@ -49,11 +49,11 @@ border-radius:5px;
 </string>
    </property>
   </widget>
-  <widget class="QTextEdit" name="textEdit">
+  <widget class="QTextEdit" name="textNew">
    <property name="geometry">
     <rect>
      <x>50</x>
-     <y>200</y>
+     <y>210</y>
      <width>261</width>
      <height>61</height>
     </rect>
@@ -70,9 +70,9 @@ border-radius:5px;
    <property name="geometry">
     <rect>
      <x>50</x>
-     <y>40</y>
+     <y>50</y>
      <width>101</width>
-     <height>51</height>
+     <height>31</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -86,9 +86,9 @@ border-radius:5px;
    <property name="geometry">
     <rect>
      <x>50</x>
-     <y>160</y>
+     <y>170</y>
      <width>101</width>
-     <height>51</height>
+     <height>31</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -102,7 +102,7 @@ border-radius:5px;
    <property name="geometry">
     <rect>
      <x>150</x>
-     <y>10</y>
+     <y>0</y>
      <width>101</width>
      <height>51</height>
     </rect>
