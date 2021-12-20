@@ -10,45 +10,63 @@
 #include <QPixmap>
 #include <QIcon>
 #include <iostream>
+#include <QMessageBox>
+#include <QTextCursor>
 
-void planWindow::setPhotos()
+#define NOT_VALUE_FOR_FIELD -1
+
+int is_not_empty_string(std::string str)
 {
-    QPixmap heart_pix(":/img/heart.png");
-    int w = ui->heart->width();
-    int h = ui->heart->height();
-
-    ui->heart->setPixmap(heart_pix.scaled(w, h, Qt::KeepAspectRatio));
-
-    QPixmap profile_pix(":/img/cats/7.png");
-    ui->profileImg->setPixmap(profile_pix.scaled(ui->profileImg->width(), ui->profileImg->height(), Qt::KeepAspectRatio));
-
-   // QPixmap settings_pix(":/img/cats/7.png");
-    ui->settingsButton->setIcon(QIcon(":/img/settings.png"));
-    ui->settingsButton->setIconSize(QSize(45, 45));
+	for(int i = 0; i < str.size(); i++)
+		if(i != " ")
+			return 1;
+		
+	return 0;
 }
 
-// функция для загрузки данных о задачах
-/*
-void planWindow::uploadDataTasks()
+void planWindow::delete_task_if_it_empty()
 {
-    planWindow::tasks = new QString[planWindow::count_tasks_on_window];
-	
-<<<<<<< HEAD
-	std::vector<std::string> rc = client.get_all_tasks_by_userid(user_id);
-=======
-	int rc = *client.get_all_tasks_by_userid(user_id);
->>>>>>> cd526b79c7fe089d6979fe8c961f3c06e59f7793
-	
-	std::cout << "Result of take tasks = " << "\n";
-	for (auto&task : rc) {
-		std::cout << task << std::endl;
-	}
-
-    tasks[0] = "Сделать технопарк";
-    tasks[1] = "Почесать кота";
-    tasks[2] = "Поспать";
+	for(int i = 0; i < tasks.size(); i++)
+		if(is_not_empty_string(tasks[i]))
+		{
+			tasks.erase(pos_of_elem, pos_of_elem + 1);                      // удалили текст задачи
+	i		id_tasks.erase(pos_of_elem, pos_of_elem + 1);                   // удалили id задачи
+			i--;
+		}
 }
-*/
+
+planWindow::planWindow(std::string _user_id, InterClient *_client, QWidget *parent) :
+    QDialog(parent),
+    ui(new Ui::planWindow)
+{
+    ui->setupUi(this);
+	
+	client = _client;
+	user_id = stoi(_user_id);
+    user_name = QString::fromStdString("Cat");
+
+	tasks = client->get_all_tasks_by_userid(user_id);                                  // получили список всех тасок для пользователя
+	for(int i = 0; i < tasks.size(); i++)                                              // заполнили все айдишники (нумерация с 0)
+		id_tasks[i] = i;
+	
+	delete_task_if_it_empty();                                                         // удалили те задачи, которые пришли пустыми
+	
+	for(int i = 0; i < count_tasks_on_window; i++)                                     // заполнили как будто ничего показывать не нужно
+		numbers_of_tasks.push_back(NOT_VALUE_FOR_FIELD);
+	
+	for(int i = 0, j = 0; i < tasks.size() && j < count_tasks_on_window; i++, j++)     // заполнили те номера, которые нужно будет вывести 
+		numbers_of_taks[j] = i;
+	
+    setPhotos();                                                                       // установили все фото
+    fillTasks();                                                                       // заполнили значения тасок
+	
+    ui->userNameLable->setText(planWindow::user_name);                  
+}
+
+planWindow::~planWindow()
+{
+    delete ui;
+}
 
 void planWindow::fillTasks()
 {
@@ -62,45 +80,44 @@ void planWindow::fillTasks()
     task_vec.push_back(ui->taskLabel_1);
     task_vec.push_back(ui->taskLabel_2);
     task_vec.push_back(ui->taskLabel_3);
+	
+	for(int i = 0; i < count_tasks_on_window; i++)                                                  
+		if(numbers_of_tasks[i] == NOT_VALUE_FOR_FIELD)                                             // пустые значения
+		{
+			num_vec[i]->setText(QString::fromStdString(std::to_string(" ")));
+			task_vec[i]->setText(QString::fromStdString(std::to_string(" ")));
+		} 
+		else
+		{
+			num_vec[i]->setText(QString::fromStdString(std::to_string(numbers_of_tasks[i])));     // значение соотв номера
+			task_vec[i]->setText(QString::fromStdString(tasks[numbers_of_tasks[i]]));             // значение соотв задачи
+		}
+}
 
-	for(int i = 1, real = number_of_top_task; i <= count_tasks_on_window; i++, real++)
+void planWindow::showLastTasks()
+{
+	if(id_tasks.size() < number_of_tasks.size())
 	{
-		if (real > tasks.size()) {
-			real = 0;
-        }
-			
-		num_vec[i-1]->setText(QString::fromStdString(std::to_string(real + 1)));
-		task_vec[i-1]->setText(planWindow::tasks[real]);
+		int i = 0;
+		for(; i < id_tasks.size(); i++)
+			numbers_of_tasks[i] = id_tasks[i];
+		
+		for(; i < number_of_tasks.size(); i++)
+			numbers_of_tasks[i] = -1;
+		
+		return ;
+		
 	}
-}
-
-planWindow::planWindow(std::string _user_id, InterClient *_client, QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::planWindow)
-{
-    ui->setupUi(this);
 	
-	client = _client;
-	user_id = stoi(_user_id);
-    user_name = QString::fromStdString(_user_id);//user_id != user_name
-
-	std::vector<std::string> _tasks = client->get_all_tasks_by_userid(user_id);
-	for(int i = 0; i < _tasks.size(); i++)
-		tasks.push_back(QString::fromStdString(_tasks[i]));
+	for(int i = number_of_tasks.size(); i > 0; i--)
+		numbers_of_tasks[i] = id_tasks[id_tasks.size() - i];
 	
-    setPhotos();
-    fillTasks();
-	
-    ui->userNameLable->setText(planWindow::user_name);
-}
-
-planWindow::~planWindow()
-{
-    delete ui;
+	fillTasks();
 }
 
 void planWindow::on_pushButton_2_clicked()
 {
+	delete []number_of_tasks;
     QWidget::close();
 }
 
@@ -118,49 +135,82 @@ void planWindow::on_see_cats_clicked()
     cats.exec();
 }
 
+void planWindow::clean_form()
+{
+	QTextCursor cur = ui->text_of_new_task->textCursor();
+    cur.movePosition(QTextCursor::Start);
+    cur.movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
+    cur.removeSelectedText();
+
+    ui->text_of_new_task->insertPlainText("");
+}
+
 void planWindow::on_create_clicked()
 {
     QString text_of_task = ui->text_of_new_task->toPlainText();
-	
 	std::string text = text_of_task.toLatin1().data();
 	
-	if(text != "")
+	if(is_not_empty_string(text))
 	{	
-		tasks.push_back(QString::fromStdString(text));
-		fillTasks();
-		client->add_new_task(user_id, tasks.size() + 1, text);
+		tasks.push_back(QString::fromStdString(text));              // добавили задачу в конец списка задач
+		if(id_tasks.size() == 0)
+			id_tasks.push_back(0);
+		else
+			id_tasks.push_back(id_tasks[id_tasks.size() - 1] + 1);  // новый айди задачи следующий после уже существуещего (последнего)
+		                                         
+		client->add_new_task(user_id, ++tasks.size(), text);        // залили задачу в бд
+		
+		showLastTasks();                                            // обновили 
 	}
+	else
+		QMessageBox::warning(this, "Error", "Вы не заполнили поле, задача не была создана");
+	
+	clean_form();                                                   // почистили форму
+}
+
+void planWindow::shift_numbers(int from_index)
+{
+	int i = from_index;
+	for(; i < count_tasks_on_window - 1; i++)                                                                          // все до последней просто сдвинули
+		numbers_of_tasks[i] = numbers_of_tasks[i + 1];
+	
+	// если это сработает, это будет чудом
+	if(numbers_of_tasks[i - 1] == NOT_VALUE_FOR_FIELD || numbers_of_tasks[i] >= id_tasks[id_tasks.size() - 1])         // если следующая таска не существует
+		numbers_of_taks[i] = NOT_VALUE_FOR_FIELD;
+	else
+		numbers_of_tasks[i] = id_tasks[numbers_of_tasks[i] + 1];
+}
+
+void planWindow::delete_task_by_index(int index)
+{
+	if(numbers_of_tasks[index] == NOT_VALUE_FOR_FIELD)
+		return ;
+	
+	int number_of_task = numbers_of_tasks[index];                   // вытащили под каким айдишником лежит удаляемая задача
+    auto pos_of_elem = tasks.cbegin() + number_of_task + index;     // нашли позицию этой задачи
+	
+    tasks.erase(pos_of_elem, pos_of_elem + 1);                      // удалили текст задачи
+	id_tasks.erase(pos_of_elem, pos_of_elem + 1);                   // удалили id задачи
+    
+    client->delete_task(user_id, number_of_task);                   // удалили задачу с сервера
+	
+	shift_numbers(index);                                           // переделали индексы
+	fillTasks();                                                    // перезаполнили 
 }
 
 void planWindow::on_done_1_clicked()
 {
-    auto pos_of_elem = tasks.cbegin() + number_of_top_task;
-    tasks.erase(tasks.cbegin() + number_of_top_task, tasks.cbegin() + number_of_top_task + 1);
-    
-    client->delete_task(user_id, 0);
-	
-	fillTasks();
+	delete_task_by_index(0);
 }
-
 
 void planWindow::on_done_2_clicked()
 {
-    auto pos_of_elem = tasks.cbegin() + number_of_top_task + 1;
-    tasks.erase(tasks.cbegin() + 1 + number_of_top_task, tasks.cbegin() + number_of_top_task + 2);
-
-    client->delete_task(user_id, 1);
-
-    fillTasks();
+    delete_task_by_index(1);
 }
 
 void planWindow::on_done_3_clicked()
 {
-    auto pos_of_elem = tasks.cbegin() + number_of_top_task + 2;
-    tasks.erase(tasks.cbegin()  + 2 + number_of_top_task, tasks.cbegin() + number_of_top_task + 3);
-
-    client->delete_task(user_id, 2);
-
-    fillTasks();
+    delete_task_by_index(2);
 }
 
 void planWindow::on_edit_1_clicked()
@@ -182,4 +232,20 @@ void planWindow::on_edit_3_clicked()
     // edittask edit;
     // edit.setModal(true);
     // edit.exec();
+}
+
+void planWindow::setPhotos()
+{
+    QPixmap heart_pix(":/img/heart.png");
+    int w = ui->heart->width();
+    int h = ui->heart->height();
+
+    ui->heart->setPixmap(heart_pix.scaled(w, h, Qt::KeepAspectRatio));
+
+    QPixmap profile_pix(":/img/cats/7.png");
+    ui->profileImg->setPixmap(profile_pix.scaled(ui->profileImg->width(), ui->profileImg->height(), Qt::KeepAspectRatio));
+
+   // QPixmap settings_pix(":/img/cats/7.png");
+    ui->settingsButton->setIcon(QIcon(":/img/settings.png"));
+    ui->settingsButton->setIconSize(QSize(45, 45));
 }

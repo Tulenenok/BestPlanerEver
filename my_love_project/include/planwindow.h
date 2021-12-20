@@ -44,14 +44,21 @@ private:
     Ui::planWindow* ui;
 
     QString user_name;
-	std::vector<QString> tasks;
+	std::vector<std::string> tasks;
+	std::vector<int> id_tasks;
 
     int count_tasks_on_window = 3;
 	int number_of_top_task = 0;
+	std::vector<int> numbers_of_tasks;
 
     void setPhotos();
     void uploadDataTasks();
     void fillTasks();
+	void delete_task_by_index(int index);
+	void delete_task_if_it_empty();
+	void shift_numbers(int from_index);
+	void showLastTasks();
+	void clean_form();
 };
 
 #endif // PLANWINDOW_H
