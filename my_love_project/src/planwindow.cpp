@@ -181,6 +181,19 @@ void planWindow::shift_numbers(int from_index)
 		numbers_of_tasks[i] = id_tasks[numbers_of_tasks[i] + 1];
 }
 
+void planWindow::shift_numbers_down()
+{
+	int i = count_tasks_on_window - 1;
+	for(; i > 0; i--)                                                                          // все до последней просто сдвинули
+		numbers_of_tasks[i] = numbers_of_tasks[i - 1];
+	
+	// если это сработает, это будет чудом                           (дисклеймер : это точно не сработает)
+	if(numbers_of_tasks[i - 1] == NOT_VALUE_FOR_FIELD || numbers_of_tasks[i] >= id_tasks[id_tasks.size() - 1])         // если следующая таска не существует
+		numbers_of_taks[i] = NOT_VALUE_FOR_FIELD;
+	else
+		numbers_of_tasks[i] = id_tasks[numbers_of_tasks[i] + 1];
+}
+
 void planWindow::delete_task_by_index(int index)
 {
 	if(numbers_of_tasks[index] == NOT_VALUE_FOR_FIELD)
@@ -257,4 +270,14 @@ void planWindow::setPhotos()
    // QPixmap settings_pix(":/img/cats/7.png");
     ui->settingsButton->setIcon(QIcon(":/img/settings.png"));
     ui->settingsButton->setIconSize(QSize(45, 45));
+}
+
+void planWindow::on_button_up_clicked()
+{
+    shift_numbers(0);
+}
+
+void planWindow::on_button_down_clicked()
+{
+    shift_numbers_down();
 }
