@@ -18,7 +18,7 @@
 static int is_not_empty_string(std::string str)
 {
 	for(int i = 0; i < str.size(); i++)
-		if(i != " ")
+		if(str[i] != " ")
 			return 1;
 		
 	return 0;
@@ -29,6 +29,7 @@ void planWindow::delete_task_if_it_empty()
 	for(int i = 0; i < tasks.size(); i++)
 		if(is_not_empty_string(tasks[i]))
 		{
+			auto pos_of_elem = tasks.cbegin() + i;
 			tasks.erase(pos_of_elem, pos_of_elem + 1);                      // удалили текст задачи
 	i		id_tasks.erase(pos_of_elem, pos_of_elem + 1);                   // удалили id задачи
 			i--;
@@ -55,7 +56,7 @@ planWindow::planWindow(std::string _user_id, InterClient *_client, QWidget *pare
 		numbers_of_tasks.push_back(NOT_VALUE_FOR_FIELD);
 	
 	for(int i = 0, j = 0; i < tasks.size() && j < count_tasks_on_window; i++, j++)     // заполнили те номера, которые нужно будет вывести 
-		numbers_of_taks[j] = i;
+		numbers_of_tasks[j] = i;
 	
     setPhotos();                                                                       // установили все фото
     fillTasks();                                                                       // заполнили значения тасок
@@ -84,8 +85,8 @@ void planWindow::fillTasks()
 	for(int i = 0; i < count_tasks_on_window; i++)                                                  
 		if(numbers_of_tasks[i] == NOT_VALUE_FOR_FIELD)                                             // пустые значения
 		{
-			num_vec[i]->setText(QString::fromStdString(std::to_string(" ")));
-			task_vec[i]->setText(QString::fromStdString(std::to_string(" ")));
+			num_vec[i]->setText(QString::fromStdString(" "));
+			task_vec[i]->setText(QString::fromStdString(" "));
 		} 
 		else
 		{
@@ -117,7 +118,6 @@ void planWindow::showLastTasks()
 
 void planWindow::on_pushButton_2_clicked()
 {
-	delete []numbers_of_tasks;
     QWidget::close();
 }
 
@@ -152,13 +152,13 @@ void planWindow::on_create_clicked()
 	
 	if(is_not_empty_string(text))
 	{	
-		tasks.push_back(QString::fromStdString(text));              // добавили задачу в конец списка задач
+		tasks.push_back(text);              // добавили задачу в конец списка задач
 		if(id_tasks.size() == 0)
 			id_tasks.push_back(0);
 		else
 			id_tasks.push_back(id_tasks[id_tasks.size() - 1] + 1);  // новый айди задачи следующий после уже существуещего (последнего)
 		                                         
-		client->add_new_task(user_id, ++tasks.size(), text);        // залили задачу в бд
+		client->add_new_task(user_id, tasks.size() + 1, text);        // залили задачу в бд
 		
 		showLastTasks();                                            // обновили 
 	}
@@ -176,7 +176,7 @@ void planWindow::shift_numbers(int from_index)
 	
 	// если это сработает, это будет чудом
 	if(numbers_of_tasks[i - 1] == NOT_VALUE_FOR_FIELD || numbers_of_tasks[i] >= id_tasks[id_tasks.size() - 1])         // если следующая таска не существует
-		numbers_of_taks[i] = NOT_VALUE_FOR_FIELD;
+		numbers_of_tasks[i] = NOT_VALUE_FOR_FIELD;
 	else
 		numbers_of_tasks[i] = id_tasks[numbers_of_tasks[i] + 1];
 }
@@ -189,7 +189,7 @@ void planWindow::shift_numbers_down()
 	
 	// если это сработает, это будет чудом                           (дисклеймер : это точно не сработает)
 	if(numbers_of_tasks[i - 1] == NOT_VALUE_FOR_FIELD || numbers_of_tasks[i] >= id_tasks[id_tasks.size() - 1])         // если следующая таска не существует
-		numbers_of_taks[i] = NOT_VALUE_FOR_FIELD;
+		numbers_of_tasks[i] = NOT_VALUE_FOR_FIELD;
 	else
 		numbers_of_tasks[i] = id_tasks[numbers_of_tasks[i] + 1];
 }
@@ -234,8 +234,8 @@ void planWindow::edit_task_by_index(int index)
 		return ;
 	}
 	
-	edittask edit;
-    edit.setModal(&tasks[numbers_of_taks[index]], true);
+	edittask edit(&tasks[numbers_of_taks[index]]);
+    edit.setModal(true);
     edit.exec();
 	
 	fillTasks();
