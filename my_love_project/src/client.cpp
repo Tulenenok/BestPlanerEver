@@ -13,6 +13,7 @@ std::vector<std::string> InterClient::get_all_tasks_by_userid(int user_id) {
 	request_.target(path);
 	request_.set(http::field::host, "localhost");
 	request_.set(http::field::accept, "application/json");
+	request_.set(http::field::connection, "keep-alive");
 	request_.set(http::field::user_agent, BOOST_BEAST_VERSION_STRING);
 
 
@@ -56,6 +57,7 @@ int InterClient::login(std::string user_login, std::string user_password) {
 	request_.set(http::field::content_length, std::to_string(body.length()));
 	request_.set(http::field::host, "localhost");
 	request_.set(http::field::accept, "application/json");
+	request_.set(http::field::connection, "Keep-Alive");
 	request_.set(http::field::user_agent, BOOST_BEAST_VERSION_STRING);
 	request_.body() = body;
 
@@ -64,6 +66,8 @@ int InterClient::login(std::string user_login, std::string user_password) {
 	in << request_;
 	write_to_server(sock, in.str());
     std::string answer = read_from_server(sock);
+
+	//std::cerr << "socket: " << sock << std::endl;
 
 	size_t body_index = answer.find("\r\n\r\n") + strlen("\r\n\r\n");
 	std::string body_ = answer.substr(body_index);
@@ -101,6 +105,7 @@ int InterClient::add_new_task(int user_id, int task_id, std::string task) {
 	request_.method(http::verb::post);
 	request_.target(path);
 	request_.set(http::field::host, "localhost");
+	request_.set(http::field::connection, "Keep-Alive");
 	request_.set(http::field::content_length, std::to_string(req.length()));
 	request_.set(http::field::user_agent, BOOST_BEAST_VERSION_STRING);
 	request_.body() = req;
@@ -129,6 +134,7 @@ int InterClient::delete_task(int user_id, int task_id) {
 	request_.method(http::verb::post);
 	request_.target(path);
 	request_.set(http::field::host, "localhost");
+	request_.set(http::field::connection, "Keep-Alive");
 	request_.set(http::field::user_agent, BOOST_BEAST_VERSION_STRING);
 
 	
@@ -154,6 +160,7 @@ int InterClient::alter_task(int user_id, int task_id, std::string new_task) {
 	request_.method(http::verb::post);
 	request_.target(path);
 	request_.set(http::field::host, "localhost");
+	request_.set(http::field::connection, "Keep-Alive");
 	request_.set(http::field::content_length, std::to_string(req.length()));
 	request_.set(http::field::user_agent, BOOST_BEAST_VERSION_STRING);
 	request_.body() = req;
@@ -172,6 +179,7 @@ int InterClient::alter_task(int user_id, int task_id, std::string new_task) {
 
 
 void InterClient::write_to_server(int filedes, std::string msg) {
+  //run();
   size_t left = msg.size();
   ssize_t sent = 0;
 
@@ -189,7 +197,7 @@ void InterClient::write_to_server(int filedes, std::string msg) {
 
 
 std::string InterClient::read_from_server(int filedes) {
-	run();
+	  //run();
 	  char buf[1024];
 	
 	  int n = ::recv(filedes, buf, sizeof(buf), MSG_NOSIGNAL);
@@ -231,9 +239,10 @@ int InterClient::run() {
 		exit(EXIT_FAILURE);
 	}
 
-	int enable = 1;
-	if (setsockopt(sock, SOL_SOCKET, SO_KEEPALIVE, &enable, sizeof(int)) < 0)
-		std::cerr << "setsockopt(SO_KEEPALIVE) failed" << std::endl;
+	// int enable = 1;
+	// if (setsockopt(sock, SOL_SOCKET, SO_KEEPALIVE, &enable, sizeof(enable)) < -1) {
+	// 	std::cerr << "setsockopt(SO_KEEPALIVE) failed" << std::endl;
+	// }
 
 	std::string host("127.0.0.1");
 	int port = std::stoi("8080");
