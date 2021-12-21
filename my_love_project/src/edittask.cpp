@@ -5,7 +5,7 @@
 static int is_not_empty_string(std::string str)
 {
 	for(int i = 0; i < str.size(); i++)
-		if(i != " ")
+		if(i != ' ')
 			return 1;
 		
 	return 0;
@@ -32,7 +32,7 @@ void edittask::on_create_clicked()
 	QString _new_text = ui->textNew->toPlainText();
 	std::string new_text = _new_text.toLatin1().data();
 	
-    if(is_not_empty_string(text))
+    if(is_not_empty_string(new_text))
 	{
 		*text_of_task = new_text;
 		QWidget::close();

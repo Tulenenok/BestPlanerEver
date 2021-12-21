@@ -18,7 +18,7 @@
 static int is_not_empty_string(std::string str)
 {
 	for(int i = 0; i < str.size(); i++)
-		if(str[i] != " ")
+		if(str[i] != ' ')
 			return 1;
 		
 	return 0;
@@ -29,9 +29,8 @@ void planWindow::delete_task_if_it_empty()
 	for(int i = 0; i < tasks.size(); i++)
 		if(is_not_empty_string(tasks[i]))
 		{
-			auto pos_of_elem = tasks.cbegin() + i;
-			tasks.erase(pos_of_elem, pos_of_elem + 1);                      // удалили текст задачи
-	i		id_tasks.erase(pos_of_elem, pos_of_elem + 1);                   // удалили id задачи
+			tasks.erase(tasks.cbegin() + i, tasks.cbegin() + i + 1);                      // удалили текст задачи
+			id_tasks.erase(id_tasks.cbegin() + i, id_tasks.cbegin() + i + 1);             // удалили id задачи
 			i--;
 		}
 }
@@ -44,13 +43,13 @@ planWindow::planWindow(std::string _user_id, InterClient *_client, QWidget *pare
 	
 	client = _client;
 	user_id = stoi(_user_id);
-    user_name = QString::fromStdString("Cat");
+       user_name = QString::fromStdString("Cat");
 
 	tasks = client->get_all_tasks_by_userid(user_id);                                  // получили список всех тасок для пользователя
 	for(int i = 0; i < tasks.size(); i++)                                              // заполнили все айдишники (нумерация с 0)
-		id_tasks[i] = i;
+		id_tasks.push_back(i);
 	
-	delete_task_if_it_empty();                                                         // удалили те задачи, которые пришли пустыми
+//	delete_task_if_it_empty();                                                         // удалили те задачи, которые пришли пустыми
 	
 	for(int i = 0; i < count_tasks_on_window; i++)                                     // заполнили как будто ничего показывать не нужно
 		numbers_of_tasks.push_back(NOT_VALUE_FOR_FIELD);
@@ -111,7 +110,7 @@ void planWindow::showLastTasks()
 	}
 	
 	for(int i = numbers_of_tasks.size(); i > 0; i--)
-		numbers_of_tasks[i] = id_tasks[id_tasks.size() - i];
+		numbers_of_tasks[i - 1] = id_tasks[id_tasks.size() - i];
 	
 	fillTasks();
 }
@@ -137,7 +136,7 @@ void planWindow::on_see_cats_clicked()
 
 void planWindow::clean_form()
 {
-	QTextCursor cur = ui->text_of_new_task->textCursor();
+    QTextCursor cur = ui->text_of_new_task->textCursor();
     cur.movePosition(QTextCursor::Start);
     cur.movePosition(QTextCursor::End, QTextCursor::KeepAnchor);
     cur.removeSelectedText();
@@ -168,17 +167,20 @@ void planWindow::on_create_clicked()
 	clean_form();                                                   // почистили форму
 }
 
-void planWindow::shift_numbers(int from_index)
-{
-	int i = from_index;
-	for(; i < count_tasks_on_window - 1; i++)                                                                          // все до последней просто сдвинули
-		numbers_of_tasks[i] = numbers_of_tasks[i + 1];
-	
-	// если это сработает, это будет чудом
-	if(numbers_of_tasks[i - 1] == NOT_VALUE_FOR_FIELD || numbers_of_tasks[i] >= id_tasks[id_tasks.size() - 1])         // если следующая таска не существует
-		numbers_of_tasks[i] = NOT_VALUE_FOR_FIELD;
-	else
-		numbers_of_tasks[i] = id_tasks[numbers_of_tasks[i] + 1];
+void planWindow::shift_numbers(int from_index) 
+{ 
+	int i = from_index; 
+	for(; i < count_tasks_on_window - 1; i++)                                                                          // все до последней просто сдвинули 
+ 	numbers_of_tasks[i] = numbers_of_tasks[i + 1]; 
+  
+ 	// если это сработает, это будет чудом 
+ 	if(numbers_of_tasks[i - 1] == NOT_VALUE_FOR_FIELD)         // если следующая таска не существует 
+ 	{ 
+ 	 	numbers_of_tasks[i] = NOT_VALUE_FOR_FIELD; 
+  		return ; 
+ 	} 
+  
+ 	numbers_of_tasks[i] = numbers_of_tasks[i - 1] + 1; 
 }
 
 void planWindow::shift_numbers_down()
@@ -196,19 +198,19 @@ void planWindow::shift_numbers_down()
 
 void planWindow::delete_task_by_index(int index)
 {
-	if(numbers_of_tasks[index] == NOT_VALUE_FOR_FIELD)
-		return ;
+    if(numbers_of_tasks[index] == NOT_VALUE_FOR_FIELD)
+	return ;
 	
-	int num = numbers_of_tasks[index];                   // вытащили под каким айдишником лежит удаляемая задача
+    int num = numbers_of_tasks[index];                   // вытащили под каким айдишником лежит удаляемая задача
     auto pos_of_elem = tasks.cbegin() + num + index;     // нашли позицию этой задачи
 	
-    tasks.erase(pos_of_elem, pos_of_elem + 1);                      // удалили текст задачи
-	id_tasks.erase(pos_of_elem, pos_of_elem + 1);                   // удалили id задачи
+    tasks.erase(tasks.cbegin() + num + index, tasks.cbegin() + num + index + 1);                      // удалили текст задачи
+    id_tasks.erase(id_tasks.cbegin() + num + index, id_tasks.cbegin() + num + index + 1);                   // удалили id задачи
     
     client->delete_task(user_id, num);                   // удалили задачу с сервера
 	
-	shift_numbers(index);                                           // переделали индексы
-	fillTasks();                                                    // перезаполнили 
+    shift_numbers(index);                                           // переделали индексы
+    fillTasks();                                                    // перезаполнили 
 }
 
 void planWindow::on_done_1_clicked()
@@ -234,7 +236,7 @@ void planWindow::edit_task_by_index(int index)
 		return ;
 	}
 	
-	edittask edit(&tasks[numbers_of_taks[index]]);
+	edittask edit(&tasks[numbers_of_tasks[index]]);
     edit.setModal(true);
     edit.exec();
 	
