@@ -125,7 +125,7 @@ void planWindow::showLastTasks()
 	}
 	
 	for(int i = numbers_of_tasks.size(); i > 0; i--)
-		numbers_of_tasks[i] = id_tasks[id_tasks.size() - i];
+		numbers_of_tasks[i - 1] = id_tasks[id_tasks.size() - i];
 	
 	fillTasks();
 }
@@ -195,24 +195,20 @@ void planWindow::on_create_clicked()
 // 		numbers_of_tasks[i] = id_tasks[numbers_of_tasks[i] + 1];
 // }
 
-void planWindow::shift_numbers(int from_index)
-{
-    int i = from_index;
-    for(; i < count_tasks_on_window - 1; i++)                                                                          // все до последней просто сдвинули
-        numbers_of_tasks[i] = numbers_of_tasks[i + 1];
-
-    // если это сработает, это будет чудом
-    if(numbers_of_tasks[i - 1] == NOT_VALUE_FOR_FIELD )         // если следующая таска не существует
-    {
-        numbers_of_tasks[i] = NOT_VALUE_FOR_FIELD;
-        return ;
-    }
-
-    if(numbers_of_tasks[i - 1] == tasks.size() - 1)
-    {
-        numbers_of_tasks[i] = NOT_VALUE_FOR_FIELD;
-        return;
-    }
+void planWindow::shift_numbers(int from_index) 
+{ 
+ int i = from_index; 
+ for(; i < count_tasks_on_window - 1; i++)                                                                          // все до последней просто сдвинули 
+  numbers_of_tasks[i] = numbers_of_tasks[i + 1]; 
+  
+ // если это сработает, это будет чудом 
+ if(numbers_of_tasks[i - 1] == NOT_VALUE_FOR_FIELD)         // если следующая таска не существует 
+ { 
+  numbers_of_tasks[i] = NOT_VALUE_FOR_FIELD; 
+  return ; 
+ } 
+  
+ numbers_of_tasks[i] = numbers_of_tasks[i - 1] + 1; 
 }
 
 void planWindow::shift_numbers_down()
