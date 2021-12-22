@@ -1,18 +1,19 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.16)
+set (CMAKE_CXX_STANDARD 14)
 
-project(my_love_project LANGUAGES CXX)
-
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
-
-set(CMAKE_AUTOUIC ON)
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTORCC ON)
-
-set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+project(boost.beast)
 
 find_package(Boost)
-include_directories(${Boost_INCLUDE_DIRS})
+include_directories(${Boost_INCLUDE_DIRS} V2)
+
+
+
+add_subdirectory(V2)
+
+# add_executable(main src/main.c)
+# target_link_libraries(main recsys recsys_multi)
+
+
 
 include(FetchContent)
 
@@ -26,84 +27,14 @@ if(NOT json_POPULATED)
   add_subdirectory(${json_SOURCE_DIR} ${json_BINARY_DIR} EXCLUDE_FROM_ALL)
 endif()
 
-add_library(client SHARED ./src/client.cpp)
-target_link_libraries(client pthread ${Boost_LIBRARIES} nlohmann_json::nlohmann_json)
 
-find_package(QT NAMES Qt6 Qt5 COMPONENTS Widgets REQUIRED)
-find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets REQUIRED)
+# Async HTTP Client
+# add_executable(async.http.client  async.http.client.cpp)
+# target_link_libraries(async.http.client pthread ${Boost_LIBRARIES})
 
-include_directories(include)
+#  Async HTTP Server
+add_executable(async.http.server async.http.server.h async.http.server.cpp connection.h connection.cpp)
+target_link_libraries(async.http.server  pthread ${Boost_LIBRARIES} nlohmann_json::nlohmann_json database)
 
-set(MAIN_FILES
-        src/main.cpp
-        src/mainwindow.cpp
-        include/mainwindow.h
-        src/mainwindow.ui
-)
 
-set(CAT_FORM_FILES
-        src/catform.cpp
-        include/catform.h
-        src/catform.ui
-)
-
-set(REG_FORM_FILES
-        src/regform.cpp
-        include/regform.h
-        src/regform.ui
-)
-
-set(PLAN_FILES
-        src/planwindow.cpp
-        include/planwindow.h
-        src/planwindow.ui
-)
-
-set(SET_FORM_FILES
-        src/settingsform.cpp
-        include/settingsform.h
-        src/settingsform.ui
-)
-
-set(SET_CREATE_NEW_TASK
-        create_new_task.cpp
-        create_new_task.h
-        create_new_task.ui
-)
-
-set(SET_EDIt_TASK
-        edittask.cpp
-        edittask.h
-        edittask.ui
-)
-
-set(PROJECT_SOURCES
-      ${MAIN_FILES}
-      ${CAT_FORM_FILES}
-      ${REG_FORM_FILES}
-      ${PLAN_FILES}
-      ${SET_FORM_FILES}
-	  ${SET_CREATE_NEW_TASK}
-	  ${SET_EDIT_TASK}
-)
-
-set(RESOURCES
-        sources/resources.qrc)
-
-if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-    qt_add_executable(my_love_project
-        ${PROJECT_SOURCES}
-    )
-else()
-    if(ANDROID)
-        add_library(my_love_project SHARED
-            ${PROJECT_SOURCES}
-        )
-    else()
-        add_executable(my_love_project
-            ${PROJECT_SOURCES} ${RESOURCES}
-        )
-    endif()
-endif()
-
-target_link_libraries(my_love_project PRIVATE client Qt${QT_VERSION_MAJOR}::Widgets)
+# target_link_libraries(async.http.server PRIVATE nlohmann_json::nlohmann_json)
