@@ -296,12 +296,14 @@ void planWindow::setPhotos()
 
 void planWindow::on_button_up_clicked()
 {
-    shift_up();
-	fillTasks();
+    shift_down();
+    //shift_up();
+    fillTasks();
 }
 
 void planWindow::on_button_down_clicked()
 {
-    shift_down();
-	fillTasks();
+    //shift_down();
+    shift_up();
+    fillTasks();
 }
