@@ -24,12 +24,11 @@ void MainWindow::on_pushButton_clicked()
     QString password = ui->password->text();
 
 	int rc = client->login(login.toLatin1().data(),  password.toLatin1().data());
-	//std::cout << "Result of check" << rc;
-	
+
 	if(rc != -1)
 	{
 		hide();
-		planWindow plan(std::to_string(rc), client);
+		planWindow plan(std::to_string(rc), login.toLatin1().data(), client);
 		plan.setModal(true);
 		plan.exec();
 	}

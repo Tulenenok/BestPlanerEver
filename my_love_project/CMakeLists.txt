@@ -71,6 +71,12 @@ set(SET_CREATE_NEW_TASK
         src/create_new_task.ui
 )
 
+set(SET_EDIT_TASK
+        src/edittask.cpp
+        include/edittask.h
+        src/edittask.ui
+)
+
 set(PROJECT_SOURCES
       ${MAIN_FILES}
       ${CAT_FORM_FILES}
@@ -78,6 +84,7 @@ set(PROJECT_SOURCES
       ${PLAN_FILES}
       ${SET_FORM_FILES}
 	  ${SET_CREATE_NEW_TASK}
+      ${SET_EDIT_TASK}
 )
 
 set(RESOURCES

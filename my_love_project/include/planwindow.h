@@ -17,7 +17,7 @@ class planWindow : public QDialog
     Q_OBJECT
 
 public:
-    explicit planWindow(std::string _user_id, InterClient *_client, QWidget* parent = nullptr);
+    explicit planWindow(std::string _user_id, std::string _user_name, InterClient *_client, QWidget* parent = nullptr);
     ~planWindow();
     
     InterClient *client;
@@ -59,9 +59,9 @@ private:
     void fillTasks();
 	void delete_task_by_index(int index);
 	void delete_task_if_it_empty();
-	void shift_numbers(int from_index);
-	void shift_numbers_down();
-	void showLastTasks();
+	void shift_up();
+	void shift_down();
+	void showTasksNearNumber(int number);
 	void clean_form();
 	void edit_task_by_index(int index);
 };

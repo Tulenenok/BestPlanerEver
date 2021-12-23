@@ -25,6 +25,9 @@
      <height>80</height>
     </rect>
    </property>
+   <property name="styleSheet">
+    <string notr="true"/>
+   </property>
    <property name="frameShape">
     <enum>QFrame::StyledPanel</enum>
    </property>
@@ -65,13 +68,13 @@
    <property name="geometry">
     <rect>
      <x>60</x>
-     <y>160</y>
+     <y>150</y>
      <width>871</width>
      <height>551</height>
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true"/>
+    <string notr="true">border:none;</string>
    </property>
    <property name="frameShape">
     <enum>QFrame::StyledPanel</enum>
@@ -197,7 +200,9 @@
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true"/>
+      <string notr="true">border: 2px solid rgb(128, 35, 243);
+border-radius: 5px;
+font-size: 15px;</string>
      </property>
      <property name="text">
       <string/>
@@ -208,7 +213,7 @@
       <rect>
        <x>70</x>
        <y>20</y>
-       <width>201</width>
+       <width>221</width>
        <height>41</height>
       </rect>
      </property>
@@ -219,7 +224,9 @@
       </size>
      </property>
      <property name="styleSheet">
-      <string notr="true"/>
+      <string notr="true">border: 2px solid rgb(128, 35, 243);
+border-radius: 5px;
+font-size: 15px;</string>
      </property>
      <property name="text">
       <string/>
@@ -286,7 +293,9 @@
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true"/>
+      <string notr="true">border: 2px solid rgb(128, 35, 243);
+border-radius: 5px;
+font-size: 15px;</string>
      </property>
      <property name="text">
       <string/>
@@ -297,12 +306,14 @@
       <rect>
        <x>70</x>
        <y>20</y>
-       <width>201</width>
+       <width>221</width>
        <height>41</height>
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true"/>
+      <string notr="true">border: 2px solid rgb(128, 35, 243);
+border-radius: 5px;
+font-size: 15px;</string>
      </property>
      <property name="text">
       <string/>
@@ -369,23 +380,9 @@
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true"/>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-    </widget>
-    <widget class="QLabel" name="taskLabel_3">
-     <property name="geometry">
-      <rect>
-       <x>70</x>
-       <y>20</y>
-       <width>201</width>
-       <height>41</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true"/>
+      <string notr="true">border: 2px solid rgb(128, 35, 243);
+border-radius: 5px;
+font-size: 15px;</string>
      </property>
      <property name="text">
       <string/>
@@ -423,6 +420,24 @@
       <string>done</string>
      </property>
     </widget>
+    <widget class="QLabel" name="taskLabel_3">
+     <property name="geometry">
+      <rect>
+       <x>70</x>
+       <y>20</y>
+       <width>221</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">border: 2px solid rgb(128, 35, 243);
+border-radius: 5px;
+font-size: 15px;</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
    </widget>
    <widget class="QLabel" name="taskLabel_4">
     <property name="geometry">
@@ -439,6 +454,9 @@
       <height>16777215</height>
      </size>
     </property>
+    <property name="autoFillBackground">
+     <bool>false</bool>
+    </property>
     <property name="styleSheet">
      <string notr="true">border: 2px solid rgb(128, 35, 243);
 border-radius: 5px;</string>
@@ -451,9 +469,9 @@ border-radius: 5px;</string>
     <property name="geometry">
      <rect>
       <x>630</x>
-      <y>100</y>
+      <y>140</y>
       <width>171</width>
-      <height>101</height>
+      <height>81</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -461,20 +479,26 @@ border-radius: 5px;</string>
 color:white;
 border: 2px solid white;
 border-radius:5px;
+font-size: 15px;
 </string>
     </property>
    </widget>
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>650</x>
-      <y>40</y>
+      <x>640</x>
+      <y>30</y>
       <width>151</width>
       <height>41</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>-1</pointsize>
+     </font>
+    </property>
     <property name="styleSheet">
-     <string notr="true">color:white;</string>
+     <string notr="true">color:white; font-size:15px;</string>
     </property>
     <property name="text">
      <string>Create new task</string>
@@ -484,7 +508,7 @@ border-radius:5px;
     <property name="geometry">
      <rect>
       <x>650</x>
-      <y>230</y>
+      <y>240</y>
       <width>131</width>
       <height>41</height>
      </rect>
@@ -496,12 +520,30 @@ border-radius:5px;
      <string>create</string>
     </property>
    </widget>
+   <widget class="QLineEdit" name="number_of_new_task">
+    <property name="geometry">
+     <rect>
+      <x>630</x>
+      <y>90</y>
+      <width>171</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color:rgb(20, 20, 20);
+color:white;
+border: 2px solid white;
+border-radius:5px;
+font-size: 14px;
+</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QPushButton" name="button_up">
    <property name="geometry">
     <rect>
      <x>40</x>
-     <y>200</y>
+     <y>190</y>
      <width>41</width>
      <height>91</height>
     </rect>
@@ -513,15 +555,14 @@ border-radius:5px;
     <locale language="Shona" country="Zimbabwe"/>
    </property>
    <property name="text">
-    <string>/\
-|</string>
+    <string>/\</string>
    </property>
   </widget>
   <widget class="QPushButton" name="button_down">
    <property name="geometry">
     <rect>
      <x>40</x>
-     <y>310</y>
+     <y>300</y>
      <width>41</width>
      <height>91</height>
     </rect>
@@ -530,8 +571,7 @@ border-radius:5px;
     <string notr="true">background-color: qlineargradient(spread:pad, x1:0.159204, y1:0.205, x2:1, y2:1, stop:0 rgba(100, 0, 221, 255), stop:1 rgba(255, 76, 255, 255));</string>
    </property>
    <property name="text">
-    <string>|
-\/</string>
+    <string>\/</string>
    </property>
   </widget>
  </widget>

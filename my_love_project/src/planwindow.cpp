@@ -12,36 +12,44 @@
 #include <iostream>
 #include <QMessageBox>
 #include <QTextCursor>
+#include <QApplication>
 
 #define NOT_VALUE_FOR_FIELD -1
 
-static int is_not_empty_string(std::string str)
+#define COUNT_TASKS_IN_SYSTEM 7
+
+static int is_empty_task(std::string str)
+{
+	return str == "empty task";
+
+	// for(int i = 0; i < str.size(); i++)
+	// 	if(str[i] != ' ')
+	// 		return 1;
+		
+	// return 0;
+}
+
+static int is_empty_string(std::string str)
 {
 	for(int i = 0; i < str.size(); i++)
 		if(str[i] != ' ')
-			return 1;
+			return 0;
 		
-	return 0;
+	return 1;
 }
 
 void planWindow::delete_task_if_it_empty()
 {
 	for(int i = 0; i < tasks.size(); i++)
-		if(is_not_empty_string(tasks[i]))
+		if(is_empty_task(tasks[i]))
 		{
-			auto pos_of_elem = tasks.cbegin() + i;
-			//tasks.erase(pos_of_elem, pos_of_elem + 1);                     // удалили текст задачи
-			
-			tasks.erase(tasks.cbegin() + i, tasks.cbegin() + i + 1);                     // удалили текст задачи
-			
-			//tasks.erase(std::remove(pos_of_elem, pos_of_elem + 1), tasks.end());
-			id_tasks.erase(id_tasks.cbegin() + i, id_tasks.cbegin() + i + 1);                   // удалили id задачи
-			//id_tasks.erase(std::remove(pos_of_elem, pos_of_elem + 1), id_tasks.end());
+			tasks.erase(tasks.cbegin() + i, tasks.cbegin() + i + 1);                     
+			id_tasks.erase(id_tasks.cbegin() + i, id_tasks.cbegin() + i + 1);                   
 			i--;
 		}
 }
 
-planWindow::planWindow(std::string _user_id, InterClient *_client, QWidget *parent) :
+planWindow::planWindow(std::string _user_id, std::string _user_name, InterClient *_client, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::planWindow)
 {
@@ -49,32 +57,23 @@ planWindow::planWindow(std::string _user_id, InterClient *_client, QWidget *pare
 	
 	client = _client;
 	user_id = stoi(_user_id);
-    user_name = QString::fromStdString("Cat");
+    user_name = QString::fromStdString(_user_name);
 
 	tasks = client->get_all_tasks_by_userid(user_id);                                  // получили список всех тасок для пользователя
-	// for (auto& task : tasks) {
-	// 	std::cerr << task <<std::endl;
-	// }
+
 	for(int i = 0; i < tasks.size(); i++)                                              // заполнили все айдишники (нумерация с 0)
 		id_tasks.push_back(i);
 	
-	//delete_task_if_it_empty();                                                         // удалили те задачи, которые пришли пустыми
-	
-	for(int i = 0; i < count_tasks_on_window; i++)                                     // заполнили как будто ничего показывать не нужно
-		numbers_of_tasks.push_back(NOT_VALUE_FOR_FIELD);
-	
-	for(int i = 0, j = 0; i < tasks.size() && j < count_tasks_on_window; i++, j++)     // заполнили те номера, которые нужно будет вывести 
-		numbers_of_tasks[j] = i;
-	
-	// for (auto& task : numbers_of_tasks) {
-	// 	std::cerr << task <<std::endl;
-	// }
-
+	for(int i = 0; i < count_tasks_on_window; i++)                                     // изначально будем показывать первые три номера
+		numbers_of_tasks.push_back(i);
 
     setPhotos();                                                                       // установили все фото
     fillTasks();                                                                       // заполнили значения тасок
 	
-    ui->userNameLable->setText(planWindow::user_name);                  
+    ui->userNameLable->setText(planWindow::user_name); 
+
+	ui->number_of_new_task->setPlaceholderText("number (1-7)");    
+	ui->text_of_new_task->setPlaceholderText("text of new task");              
 }
 
 planWindow::~planWindow()
@@ -95,38 +94,46 @@ void planWindow::fillTasks()
     task_vec.push_back(ui->taskLabel_2);
     task_vec.push_back(ui->taskLabel_3);
 	
-	for(int i = 0; i < count_tasks_on_window; i++) {                                           
-		if(numbers_of_tasks[i] == NOT_VALUE_FOR_FIELD)                                             // пустые значения
+	for(int i = 0; i < count_tasks_on_window; i++)          
+	{
+		num_vec[i]->setText(QString::fromStdString(std::to_string(numbers_of_tasks[i] + 1)));     // значение соотв номера
+		task_vec[i]->setText(QString::fromStdString(tasks[numbers_of_tasks[i]]));                 // значение соотв задачи
+
+		if(is_empty_task(tasks[numbers_of_tasks[i]]))                                           // пустые значения
 		{
-			num_vec[i]->setText(QString::fromStdString(" "));
-			task_vec[i]->setText(QString::fromStdString(" "));
+			num_vec[i]->setStyleSheet("QLabel {border: 2px solid rgb(128, 35, 243); border-radius: 5px; color:grey; font-size: 15px; padding-top: 7px; padding-left: 9px;}");
+			task_vec[i]->setStyleSheet("QLabel {border: 2px solid rgb(128, 35, 243); border-radius: 5px; color:grey; font-size: 15px; padding-top: 5px;}");
 		} 
 		else
 		{
-			num_vec[i]->setText(QString::fromStdString(std::to_string(numbers_of_tasks[i])));     // значение соотв номера
-			task_vec[i]->setText(QString::fromStdString(tasks[numbers_of_tasks[i]]));             // значение соотв задачи
+			num_vec[i]->setStyleSheet("QLabel {border: 2px solid rgb(128, 35, 243); border-radius: 5px; color:white; font-size: 15px; padding-top: 7px; padding-left: 9px;}");
+			task_vec[i]->setStyleSheet("QLabel {border: 2px solid rgb(128, 35, 243); border-radius: 5px; color:white; font-size: 15px; padding-top: 5px;}");
 		}
-	}
+	} 
 }
 
-void planWindow::showLastTasks()
+void planWindow::showTasksNearNumber(int number)
 {
-	if(id_tasks.size() < numbers_of_tasks.size())
+	if(number <= 0 || number > COUNT_TASKS_IN_SYSTEM)
 	{
-		int i = 0;
-		for(; i < id_tasks.size(); i++)
-			numbers_of_tasks[i] = id_tasks[i];
-		
-		for(; i < numbers_of_tasks.size(); i++)
-			numbers_of_tasks[i] = -1;
-		
+		std::cerr << "Invalid number in showTasksNearNumber";
 		return ;
-		
 	}
+
+	number = number - 1;
+
+	if(number < count_tasks_on_window)
+		for(int i = 0; i < count_tasks_on_window; i++)
+			numbers_of_tasks[i] = i;
 	
-	for(int i = numbers_of_tasks.size(); i > 0; i--)
-		numbers_of_tasks[i - 1] = id_tasks[id_tasks.size() - i];
-	
+	else if(number >= COUNT_TASKS_IN_SYSTEM - count_tasks_on_window)
+		for(int i = COUNT_TASKS_IN_SYSTEM - count_tasks_on_window; i < COUNT_TASKS_IN_SYSTEM; i++)
+			numbers_of_tasks[i] = i;
+
+	else
+		for(int i = 0; i < count_tasks_on_window; i++)
+			numbers_of_tasks[i] = i + number;
+
 	fillTasks();
 }
 
@@ -157,24 +164,48 @@ void planWindow::clean_form()
     cur.removeSelectedText();
 
     ui->text_of_new_task->insertPlainText("");
+	ui->number_of_new_task->setText("");
+}
+
+int number_of_task_from_str_to_int(std::string x)
+{
+	for(int i = 1; i <= COUNT_TASKS_IN_SYSTEM; i++)
+		if(x == std::to_string(i))
+			return i;
+
+	return -1;	
 }
 
 void planWindow::on_create_clicked()
 {
     QString text_of_task = ui->text_of_new_task->toPlainText();
 	std::string text = text_of_task.toLatin1().data();
+
+	QString num_of_task = ui->number_of_new_task->text();
+	int number = number_of_task_from_str_to_int(num_of_task.toLatin1().data());
+
+	if(number == -1)
+	{
+		QMessageBox::warning(this, "Error", "Номер задачи должен быть целым числом от 1 до 7");
+		return ;
+	}
+
+
+	std::cerr << text;
 	
-	if(is_not_empty_string(text))
-	{	
-		tasks.push_back(text);              // добавили задачу в конец списка задач
-		if(id_tasks.size() == 0)
-			id_tasks.push_back(0);
+	if(!is_empty_string(text))
+	{
+		tasks[number - 1] = text; 
+		showTasksNearNumber(number);
+
+		if(is_empty_task(tasks[number]))                       
+			client->add_new_task(user_id, number, text);        // залили задачу в бд
 		else
-			id_tasks.push_back(id_tasks[id_tasks.size() - 1] + 1);  // новый айди задачи следующий после уже существуещего (последнего)
-		                                         
-		client->add_new_task(user_id, tasks.size() + 1, text);        // залили задачу в бд
+		{
+			//QMessageBox::warning(this, "Error", "Задача была перезаписана");
+			client->alter_task(user_id, number, text);                   
+		}
 		
-		showLastTasks();                                            // обновили 
 	}
 	else
 		QMessageBox::warning(this, "Error", "Вы не заполнили поле, задача не была создана");
@@ -182,63 +213,34 @@ void planWindow::on_create_clicked()
 	clean_form();                                                   // почистили форму
 }
 
-// void planWindow::shift_numbers(int from_index)
-// {
-// 	int i = from_index;
-// 	for(; i < count_tasks_on_window - 1; i++)                                                                          // все до последней просто сдвинули
-// 		numbers_of_tasks[i] = numbers_of_tasks[i + 1];
-	
-// 	// если это сработает, это будет чудом
-// 	if(numbers_of_tasks[i - 1] == NOT_VALUE_FOR_FIELD || numbers_of_tasks[i] >= id_tasks[id_tasks.size() - 1])         // если следующая таска не существует
-// 		numbers_of_tasks[i] = NOT_VALUE_FOR_FIELD;
-// 	else
-// 		numbers_of_tasks[i] = id_tasks[numbers_of_tasks[i] + 1];
-// }
-
-void planWindow::shift_numbers(int from_index) 
-{ 
- int i = from_index; 
- for(; i < count_tasks_on_window - 1; i++)                                                                          // все до последней просто сдвинули 
-  numbers_of_tasks[i] = numbers_of_tasks[i + 1]; 
-  
- // если это сработает, это будет чудом 
- if(numbers_of_tasks[i - 1] == NOT_VALUE_FOR_FIELD)         // если следующая таска не существует 
- { 
-  numbers_of_tasks[i] = NOT_VALUE_FOR_FIELD; 
-  return ; 
- } 
-  
- numbers_of_tasks[i] = numbers_of_tasks[i - 1] + 1; 
+void planWindow::shift_up() 
+{
+	for(int i = 0; i < count_tasks_on_window; i++)                                                                          
+		numbers_of_tasks[i] =  (numbers_of_tasks[i] + 1) % COUNT_TASKS_IN_SYSTEM;
 }
 
-void planWindow::shift_numbers_down()
+void planWindow::shift_down()
 {
-	int i = count_tasks_on_window - 1;
-	for(; i > 0; i--)                                                                          // все до последней просто сдвинули
-		numbers_of_tasks[i] = numbers_of_tasks[i - 1];
-	
-	// если это сработает, это будет чудом                           (дисклеймер : это точно не сработает)
-	if(numbers_of_tasks[i - 1] == NOT_VALUE_FOR_FIELD || numbers_of_tasks[i] >= id_tasks[id_tasks.size() - 1])         // если следующая таска не существует
-		numbers_of_tasks[i] = NOT_VALUE_FOR_FIELD;
-	else
-		numbers_of_tasks[i] = id_tasks[numbers_of_tasks[i] + 1];
+	for(int i = 0; i < count_tasks_on_window; i++)                                                                          
+		if(numbers_of_tasks[i] != 0)
+			numbers_of_tasks[i]--;
+		else
+			numbers_of_tasks[i] = COUNT_TASKS_IN_SYSTEM - 1;
 }
 
 void planWindow::delete_task_by_index(int index)
 {
-	if(numbers_of_tasks[index] == NOT_VALUE_FOR_FIELD)
-		return ;
-	
 	int num = numbers_of_tasks[index];                   // вытащили под каким айдишником лежит удаляемая задача
-    auto pos_of_elem = tasks.cbegin() + num + index;     // нашли позицию этой задачи
-	
-    tasks.erase(tasks.cbegin() + num + index, tasks.cbegin() + num + index + 1);                      // удалили текст задачи
-	id_tasks.erase(id_tasks.cbegin() + num + index, id_tasks.cbegin() + num + index + 1);                   // удалили id задачи
-    
-    client->delete_task(user_id, num);                   // удалили задачу с сервера
-	
-	shift_numbers(index);                                           // переделали индексы
-	fillTasks();                                                    // перезаполнили 
+
+	if(is_empty_task(tasks[num]))
+	{
+		QMessageBox::warning(this, "Error", "Задача уже выполнена");
+		return ;
+	}
+
+	tasks[num] = "empty task";
+    client->delete_task(user_id, num + 1);                   
+	fillTasks();                                                    
 }
 
 void planWindow::on_done_1_clicked()
@@ -264,10 +266,11 @@ void planWindow::edit_task_by_index(int index)
 		return ;
 	}
 	
-	// edittask edit(&tasks[numbers_of_tasks[index]]);
-    // edit.setModal(true);
-    // edit.exec();
+	edittask edit(&tasks[numbers_of_tasks[index]]);
+    edit.setModal(true);
+    edit.exec();
 	
+	client->alter_task(user_id, numbers_of_tasks[index] + 1, tasks[numbers_of_tasks[index]]);      
 	fillTasks();
 }
 
@@ -304,10 +307,12 @@ void planWindow::setPhotos()
 
 void planWindow::on_button_up_clicked()
 {
-    shift_numbers(0);
+    shift_up();
+	fillTasks();
 }
 
 void planWindow::on_button_down_clicked()
 {
-    shift_numbers_down();
+    shift_down();
+	fillTasks();
 }

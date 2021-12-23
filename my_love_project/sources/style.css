@@ -149,6 +149,11 @@ QPushButton#settingsButton
     border:none;
 }
 
+QMessageBox
+{
+    color:white;
+}
+
 QPushButton#settingsButton:hover
 {
     background-color:none;
