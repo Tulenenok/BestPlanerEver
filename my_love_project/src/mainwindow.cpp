@@ -10,6 +10,8 @@ MainWindow::MainWindow(InterClient *_client, QWidget *parent)
 {
     ui->setupUi(this);
     client = _client;
+
+    ui->password->setEchoMode(QLineEdit::EchoMode::Password);
 }
 
 MainWindow::~MainWindow()

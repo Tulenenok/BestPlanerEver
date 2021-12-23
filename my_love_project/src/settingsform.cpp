@@ -1,7 +1,7 @@
 #include "settingsform.h"
 #include "ui_settingsform.h"
 
-settingsForm::settingsForm(QWidget *parent) :
+settingsForm::settingsForm(QString  _user_name, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::settingsForm)
 {
@@ -10,13 +10,11 @@ settingsForm::settingsForm(QWidget *parent) :
     QPixmap profile_pix(":/img/cats/7.png");
     ui->profileImg_2->setPixmap(profile_pix.scaled(ui->profileImg_2->width(), ui->profileImg_2->height(), Qt::KeepAspectRatio));
 
-    QPixmap cat_pix(":/img/cats/8.jpg");
-    ui->catImg->setPixmap(cat_pix.scaled(ui->catImg->width(), ui->catImg->height(), Qt::KeepAspectRatio));
+    // QPixmap cat_pix(":/img/cats/8.jpg");
+    // ui->catImg->setPixmap(cat_pix.scaled(ui->catImg->width(), ui->catImg->height(), Qt::KeepAspectRatio));
 
-    settingsForm::user_name = "Cat";
-    settingsForm::user_password = "123";
+    user_name = _user_name;
     ui->loginLabel->setText(settingsForm::user_name);
-    ui->passwordLabel->setText(settingsForm::user_password);
 }
 
 settingsForm::~settingsForm()

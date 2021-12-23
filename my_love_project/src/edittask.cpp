@@ -2,6 +2,11 @@
 #include "ui_edittask.h"
 #include <QMessageBox>
 
+static int is_empty_task(std::string str)
+{
+	return str == "empty task";
+}
+
 static int is_not_empty_string(std::string str)
 {
 	for(int i = 0; i < str.size(); i++)
@@ -17,9 +22,18 @@ edittask::edittask(std::string *_text_of_task, QWidget *parent) :
 {
     ui->setupUi(this);
 	text_of_task = _text_of_task;
-	
-	ui->textNow->setPlainText(QString::fromStdString(*text_of_task));
-	ui->textNew->setPlainText(QString::fromStdString(*text_of_task));
+
+	if(is_empty_task(*text_of_task))
+	{
+		ui->textNow->setPlainText(QString::fromStdString(""));
+		ui->textNew->setPlainText(QString::fromStdString(""));
+		ui->textNew->setPlaceholderText("edit text of task"); 
+	}
+	else
+	{
+		ui->textNow->setPlainText(QString::fromStdString(*text_of_task));
+		ui->textNew->setPlainText(QString::fromStdString(*text_of_task));
+	}
 }
 
 edittask::~edittask()

@@ -21,12 +21,6 @@
 static int is_empty_task(std::string str)
 {
 	return str == "empty task";
-
-	// for(int i = 0; i < str.size(); i++)
-	// 	if(str[i] != ' ')
-	// 		return 1;
-		
-	// return 0;
 }
 
 static int is_empty_string(std::string str)
@@ -73,7 +67,8 @@ planWindow::planWindow(std::string _user_id, std::string _user_name, InterClient
     ui->userNameLable->setText(planWindow::user_name); 
 
 	ui->number_of_new_task->setPlaceholderText("number (1-7)");    
-	ui->text_of_new_task->setPlaceholderText("text of new task");              
+	ui->text_of_new_task->setPlaceholderText("text of new task");     
+	//ui->quote->setStyleSheet("QLabel {margin-top: 5px;}")     
 }
 
 planWindow::~planWindow()
@@ -144,7 +139,7 @@ void planWindow::on_pushButton_2_clicked()
 
 void planWindow::on_settingsButton_clicked()
 {
-    settingsForm sets;
+    settingsForm sets(user_name);
     sets.setModal(true);
     sets.exec();
 }
@@ -260,12 +255,6 @@ void planWindow::on_done_3_clicked()
 
 void planWindow::edit_task_by_index(int index)
 {
-	if(numbers_of_tasks[index] == -1)
-	{
-		QMessageBox::warning(this, "Error", "Это пустое поле, его нельзя редактировать");
-		return ;
-	}
-	
 	edittask edit(&tasks[numbers_of_tasks[index]]);
     edit.setModal(true);
     edit.exec();
