@@ -53,7 +53,13 @@ planWindow::planWindow(std::string _user_id, std::string _user_name, InterClient
 	user_id = stoi(_user_id);
     user_name = QString::fromStdString(_user_name);
 
-	tasks = client->get_all_tasks_by_userid(user_id);                                  // получили список всех тасок для пользователя
+	tasks = client->get_all_tasks_by_userid(user_id);                               // получили список всех тасок для пользователя
+
+	if (tasks.size() == 0) {
+		for (int i = 0; i < 7; ++i) {
+			tasks.push_back("empty task");
+		}
+	}
 
 	for(int i = 0; i < tasks.size(); i++)                                              // заполнили все айдишники (нумерация с 0)
 		id_tasks.push_back(i);
@@ -186,7 +192,7 @@ void planWindow::on_create_clicked()
 	}
 
 
-	std::cerr << text;
+	//std::cerr << text;
 	
 	if(!is_empty_string(text))
 	{
@@ -296,12 +302,12 @@ void planWindow::setPhotos()
 
 void planWindow::on_button_up_clicked()
 {
-    shift_up();
+	shift_down();
 	fillTasks();
 }
 
 void planWindow::on_button_down_clicked()
 {
-    shift_down();
+    shift_up();
 	fillTasks();
 }

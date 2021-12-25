@@ -39,7 +39,7 @@ void MainWindow::on_pushButton_clicked()
 // форма регистрации
 void MainWindow::on_pushButton_2_clicked()
 {
-    regform reg;
+    regform reg(client);
     reg.setModal(true);
     reg.exec();
 }

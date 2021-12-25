@@ -8,10 +8,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-regform::regform(QWidget *parent) :
+regform::regform(InterClient* _client, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::regform)
 {
+    client = _client;
     ui->setupUi(this);
 }
 
@@ -28,30 +29,8 @@ void regform::on_pushButton_clicked()
     QString password = ui->password->text();
     QString password_again = ui->password_again->text();
 
-    if(QString::compare(password, password_again, Qt::CaseInsensitive) == 0)
-    {
-        // записать на плюсах
-//        QFile file("./db.txt");
-//        if (file.open(QIODevice::Append)) {
-//           std::cout <<"i ti";
-//           file.write(name.toUtf8());
-//        }
-//        else
-//        {
-//            std::cout <<"error with open file";
-//        }
-//        file.close();
-
-
-        // записать на сях
-//        FILE *f = fopen("./db.txt", "a");
-//        if(!f)
-//        {
-//            std::cout << "error with open file\n";
-//            return ;
-//        }
-//        fprintf(f, "%s %s %s\n", name.toLatin1().data(), mail.toLatin1().data(), password.toLatin1().data());
-//        fclose(f);
+    if(QString::compare(password, password_again, Qt::CaseInsensitive) == 0) {
+        client->registration(name.toLatin1().data(), password.toLatin1().data(), mail.toLatin1().data());
     }
 
     QWidget::close();

@@ -43,6 +43,8 @@ public:
   std::vector<std::string> get_all_tasks_by_userid(int user_id);
 
   int login(std::string user_login, std::string user_password);
+  
+  int registration(std::string user_login, std::string user_password, std::string user_email);
 
   int add_new_task(int user_id, int task_id, std::string task);
 

@@ -2,6 +2,7 @@
 #define REGFORM_H
 
 #include <QDialog>
+#include "client.h"
 
 namespace Ui {
 class regform;
@@ -12,7 +13,7 @@ class regform : public QDialog
     Q_OBJECT
 
 public:
-    explicit regform(QWidget *parent = nullptr);
+    explicit regform(InterClient* _client, QWidget *parent = nullptr);
     ~regform();
 
 private slots:
@@ -20,6 +21,7 @@ private slots:
 
 private:
     Ui::regform *ui;
+    InterClient* client;
 };
 
 #endif // REGFORM_H

@@ -46,6 +46,36 @@ std::vector<std::string> InterClient::get_all_tasks_by_userid(int user_id) {
 	return all_the_tasks;
 }
 
+int InterClient::registration(std::string user_login, std::string user_password, std::string user_email) {
+    std::string path = {"/registration/"};
+	std::string body = "{\"login\":\"" + user_login + "\"," + "\"password\":\"" + user_password + "\"," + "\"email\":\"" + user_email + "\"}";
+
+	request_.version(10);
+	request_.method(http::verb::post);
+	request_.target(path);
+	request_.set(http::field::content_length, std::to_string(body.length()));
+	request_.set(http::field::host, "localhost");
+	request_.set(http::field::accept, "application/json");
+	request_.set(http::field::connection, "Keep-Alive");
+	request_.set(http::field::user_agent, BOOST_BEAST_VERSION_STRING);
+	request_.body() = body;
+
+
+	std::stringstream in;
+	in << request_;
+	write_to_server(sock, in.str());
+    std::string answer = read_from_server(sock);
+
+	std::cerr << answer << std::endl;
+
+	if (answer.find("HTTP/1.0 200 OK") == std::string::npos) {
+		std::cerr << "add_new_task bad status" << std::endl;
+		return -1;
+	}
+	return 0;
+}
+
+
 
 int InterClient::login(std::string user_login, std::string user_password) {
     std::string path = {"/login"};
