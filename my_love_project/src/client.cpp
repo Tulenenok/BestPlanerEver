@@ -24,7 +24,7 @@ std::vector<std::string> InterClient::get_all_tasks_by_userid(int user_id) {
 	write_to_server(sock, in.str());
     std::string answer = read_from_server(sock);
 
-	std::cerr << answer << std::endl;
+	std::cerr << answer << std::endl << std::endl;
 	
 	//std::cerr << "get all tasks data:\n" << answer << std::endl;
 
@@ -63,7 +63,7 @@ int InterClient::registration(std::string user_login, std::string user_password,
 	write_to_server(sock, in.str());
     std::string answer = read_from_server(sock);
 
-	std::cerr << answer << std::endl;
+	std::cerr << answer << std::endl << std::endl;
 
 	if (answer.find("HTTP/1.0 200 OK") == std::string::npos) {
 		std::cerr << "add_new_task bad status" << std::endl;
@@ -94,7 +94,7 @@ int InterClient::login(std::string user_login, std::string user_password) {
 	write_to_server(sock, in.str());
     std::string answer = read_from_server(sock);
 
-	std::cerr << answer << std::endl;
+	std::cerr << answer << std::endl << std::endl;
 
 	size_t body_index = answer.find("\r\n\r\n") + strlen("\r\n\r\n");
 	std::string body_ = answer.substr(body_index);
@@ -144,7 +144,7 @@ int InterClient::add_new_task(int user_id, int task_id, std::string task) {
 	write_to_server(sock, in.str());
 	std::string answer = read_from_server(sock);
 
-	std::cerr << answer << std::endl;
+	std::cerr << answer << std::endl << std::endl;
 	
 	if (answer.find("HTTP/1.0 200 OK") == std::string::npos) {
 		std::cerr << "add_new_task bad status" << std::endl;
@@ -171,7 +171,7 @@ int InterClient::delete_task(int user_id, int task_id) {
 	write_to_server(sock, in.str());
 	std::string answer = read_from_server(sock);
 
-	std::cerr << answer << std::endl;
+	std::cerr << answer << std::endl << std::endl;
 	
 	if (answer.find("HTTP/1.0 200 OK") == std::string::npos) {
 		std::cerr << "delete_task bad status" << std::endl;
@@ -200,7 +200,7 @@ int InterClient::alter_task(int user_id, int task_id, std::string new_task) {
 	write_to_server(sock, in.str());
 	std::string answer = read_from_server(sock);
 
-	std::cerr << answer << std::endl;
+	std::cerr << answer << std::endl << std::endl;
 
 	
 	if (answer.find("HTTP/1.0 200 OK") == std::string::npos) {
