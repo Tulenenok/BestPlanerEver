@@ -149,7 +149,7 @@ QPushButton#settingsButton
     border:none;
 }
 
-QMessageBox
+QMessageBox::warning .QLabel
 {
     color:white;
 }
