@@ -17,7 +17,6 @@ std::vector<std::string> InterClient::get_all_tasks_by_userid(int user_id) {
 	request_.set(http::field::user_agent, BOOST_BEAST_VERSION_STRING);
 
 
-
 	std::stringstream in;
 	in << request_;
 	//std::cerr << "requset:\n "<< in.str() << std::endl;
@@ -25,7 +24,9 @@ std::vector<std::string> InterClient::get_all_tasks_by_userid(int user_id) {
 	write_to_server(sock, in.str());
     std::string answer = read_from_server(sock);
 
-	std::cerr << "get all tasks data:\n" << answer << std::endl;
+	std::cerr << answer << std::endl;
+	
+	//std::cerr << "get all tasks data:\n" << answer << std::endl;
 
 	size_t body_index = answer.find("\r\n\r\n") + strlen("\r\n\r\n");
 	std::string body_ = answer.substr(body_index);
@@ -33,13 +34,9 @@ std::vector<std::string> InterClient::get_all_tasks_by_userid(int user_id) {
 
 	json ans = json::parse(body_);
 
-	//std::cout << ans << std::endl;
-	
-
 	if (answer.find("HTTP/1.0 200 OK") == std::string::npos) {
 		std::cerr << "add_new_task bad status" << std::endl;
-		std::vector<std::string> ret;
-		return ret;
+		return std::vector<std::string>();
 	}
 	std::vector<std::string> all_the_tasks = ans["tasks"];
 
@@ -97,7 +94,7 @@ int InterClient::login(std::string user_login, std::string user_password) {
 	write_to_server(sock, in.str());
     std::string answer = read_from_server(sock);
 
-	//std::cerr << "socket: " << sock << std::endl;
+	std::cerr << answer << std::endl;
 
 	size_t body_index = answer.find("\r\n\r\n") + strlen("\r\n\r\n");
 	std::string body_ = answer.substr(body_index);
@@ -110,7 +107,7 @@ int InterClient::login(std::string user_login, std::string user_password) {
 	}
 	
 
-	std::cerr << "Returned to login:\n" << ans << std::endl;
+	//std::cerr << "Returned to login:\n" << ans << std::endl;
 
 	if (answer.find("HTTP/1.0 200 OK") == std::string::npos) {
 		std::cerr << "add_new_task bad status" << std::endl;
@@ -146,6 +143,8 @@ int InterClient::add_new_task(int user_id, int task_id, std::string task) {
 	//std::cout << in.str()+ << std::endl; 
 	write_to_server(sock, in.str());
 	std::string answer = read_from_server(sock);
+
+	std::cerr << answer << std::endl;
 	
 	if (answer.find("HTTP/1.0 200 OK") == std::string::npos) {
 		std::cerr << "add_new_task bad status" << std::endl;
@@ -166,12 +165,13 @@ int InterClient::delete_task(int user_id, int task_id) {
 	request_.set(http::field::host, "localhost");
 	request_.set(http::field::connection, "Keep-Alive");
 	request_.set(http::field::user_agent, BOOST_BEAST_VERSION_STRING);
-
 	
 	std::stringstream in;
 	in << request_;
 	write_to_server(sock, in.str());
 	std::string answer = read_from_server(sock);
+
+	std::cerr << answer << std::endl;
 	
 	if (answer.find("HTTP/1.0 200 OK") == std::string::npos) {
 		std::cerr << "delete_task bad status" << std::endl;
@@ -199,6 +199,9 @@ int InterClient::alter_task(int user_id, int task_id, std::string new_task) {
 	in << request_;
 	write_to_server(sock, in.str());
 	std::string answer = read_from_server(sock);
+
+	std::cerr << answer << std::endl;
+
 	
 	if (answer.find("HTTP/1.0 200 OK") == std::string::npos) {
 		std::cerr << "alter_task bad status" << std::endl;
@@ -221,8 +224,6 @@ void InterClient::write_to_server(int filedes, std::string msg) {
 
     left -= sent;
   }
-
-  //printf("write message %s to socket \n", msg.c_str());
 }
 
 
